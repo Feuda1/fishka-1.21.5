@@ -1,0 +1,9 @@
+{
+  "model": {
+    "type": "minecraft:special",
+    "base": "fishka:item/test_fishing_rod",
+    "model": {
+      "type": "geckolib:geckolib"
+    }
+  }
+}

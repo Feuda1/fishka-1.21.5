@@ -1,0 +1,78 @@
+{
+  "credit": "Made with Blockbench",
+  "parent": "minecraft:item/generated",
+  "texture_size": [
+    32,
+    32
+  ],
+  "display": {
+    "thirdperson_righthand": {
+      "rotation": [
+        70,
+        0,
+        0
+      ],
+      "translation": [
+        0,
+        7.75,
+        4.75
+      ]
+    },
+    "thirdperson_lefthand": {
+      "rotation": [
+        70,
+        0,
+        0
+      ],
+      "translation": [
+        0,
+        7.75,
+        4.75
+      ]
+    },
+    "firstperson_righthand": {
+      "translation": [
+        0,
+        4,
+        -3.75
+      ]
+    },
+    "firstperson_lefthand": {
+      "translation": [
+        0,
+        4,
+        -3.75
+      ]
+    },
+    "gui": {
+      "rotation": [
+        0,
+        129,
+        0
+      ]
+    },
+    "head": {
+      "translation": [
+        0,
+        10.75,
+        -4.5
+      ]
+    },
+    "fixed": {
+      "rotation": [
+        0,
+        -77.25,
+        0
+      ],
+      "translation": [
+        0,
+        0.25,
+        0
+      ]
+    }
+  },
+  "textures": {
+    "layer0": "fishka:item/test_fishing_rod",
+    "particle": "fishka:item/test_fishing_rod"
+  }
+}

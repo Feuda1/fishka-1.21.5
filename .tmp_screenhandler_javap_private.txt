@@ -1,0 +1,2501 @@
+Compiled from "ScreenHandler.java"
+public abstract class net.minecraft.screen.ScreenHandler {
+  private static final org.slf4j.Logger LOGGER;
+
+  public static final int EMPTY_SPACE_SLOT_INDEX;
+
+  public static final int field_30731;
+
+  public static final int field_30732;
+
+  public static final int field_30733;
+
+  public static final int field_30734;
+
+  public static final int field_30735;
+
+  public static final int field_30736;
+
+  public static final int field_30737;
+
+  public static final int field_52557;
+
+  public static final int field_52558;
+
+  private final net.minecraft.util.collection.DefaultedList<net.minecraft.item.ItemStack> trackedStacks;
+
+  public final net.minecraft.util.collection.DefaultedList<net.minecraft.screen.slot.Slot> slots;
+
+  private final java.util.List<net.minecraft.screen.Property> properties;
+
+  private net.minecraft.item.ItemStack cursorStack;
+
+  private final net.minecraft.util.collection.DefaultedList<net.minecraft.screen.sync.TrackedSlot> trackedSlots;
+
+  private final it.unimi.dsi.fastutil.ints.IntList trackedPropertyValues;
+
+  private net.minecraft.screen.sync.TrackedSlot trackedCursorSlot;
+
+  private int revision;
+
+  private final net.minecraft.screen.ScreenHandlerType<?> type;
+
+  public final int syncId;
+
+  private int quickCraftButton;
+
+  private int quickCraftStage;
+
+  private final java.util.Set<net.minecraft.screen.slot.Slot> quickCraftSlots;
+
+  private final java.util.List<net.minecraft.screen.ScreenHandlerListener> listeners;
+
+  private net.minecraft.screen.ScreenHandlerSyncHandler syncHandler;
+
+  private boolean disableSync;
+
+  protected net.minecraft.screen.ScreenHandler(net.minecraft.screen.ScreenHandlerType<?>, int);
+    Code:
+       0: aload_0
+       1: invokespecial #81                 // Method java/lang/Object."<init>":()V
+       4: aload_0
+       5: invokestatic  #87                 // Method net/minecraft/util/collection/DefaultedList.of:()Lnet/minecraft/util/collection/DefaultedList;
+       8: putfield      #89                 // Field trackedStacks:Lnet/minecraft/util/collection/DefaultedList;
+      11: aload_0
+      12: invokestatic  #87                 // Method net/minecraft/util/collection/DefaultedList.of:()Lnet/minecraft/util/collection/DefaultedList;
+      15: putfield      #91                 // Field slots:Lnet/minecraft/util/collection/DefaultedList;
+      18: aload_0
+      19: invokestatic  #97                 // Method com/google/common/collect/Lists.newArrayList:()Ljava/util/ArrayList;
+      22: putfield      #99                 // Field properties:Ljava/util/List;
+      25: aload_0
+      26: getstatic     #104                // Field net/minecraft/item/ItemStack.EMPTY:Lnet/minecraft/item/ItemStack;
+      29: putfield      #106                // Field cursorStack:Lnet/minecraft/item/ItemStack;
+      32: aload_0
+      33: invokestatic  #87                 // Method net/minecraft/util/collection/DefaultedList.of:()Lnet/minecraft/util/collection/DefaultedList;
+      36: putfield      #108                // Field trackedSlots:Lnet/minecraft/util/collection/DefaultedList;
+      39: aload_0
+      40: new           #110                // class it/unimi/dsi/fastutil/ints/IntArrayList
+      43: dup
+      44: invokespecial #111                // Method it/unimi/dsi/fastutil/ints/IntArrayList."<init>":()V
+      47: putfield      #113                // Field trackedPropertyValues:Lit/unimi/dsi/fastutil/ints/IntList;
+      50: aload_0
+      51: getstatic     #116                // Field net/minecraft/screen/sync/TrackedSlot.ALWAYS_IN_SYNC:Lnet/minecraft/screen/sync/TrackedSlot;
+      54: putfield      #118                // Field trackedCursorSlot:Lnet/minecraft/screen/sync/TrackedSlot;
+      57: aload_0
+      58: iconst_m1
+      59: putfield      #120                // Field quickCraftButton:I
+      62: aload_0
+      63: invokestatic  #126                // Method com/google/common/collect/Sets.newHashSet:()Ljava/util/HashSet;
+      66: putfield      #128                // Field quickCraftSlots:Ljava/util/Set;
+      69: aload_0
+      70: invokestatic  #97                 // Method com/google/common/collect/Lists.newArrayList:()Ljava/util/ArrayList;
+      73: putfield      #130                // Field listeners:Ljava/util/List;
+      76: aload_0
+      77: aload_1
+      78: putfield      #132                // Field type:Lnet/minecraft/screen/ScreenHandlerType;
+      81: aload_0
+      82: iload_2
+      83: putfield      #134                // Field syncId:I
+      86: return
+
+  protected void addPlayerHotbarSlots(net.minecraft.inventory.Inventory, int, int);
+    Code:
+       0: iconst_0
+       1: istore        4
+       3: iload         4
+       5: bipush        9
+       7: if_icmpge     39
+      10: aload_0
+      11: new           #143                // class net/minecraft/screen/slot/Slot
+      14: dup
+      15: aload_1
+      16: iload         4
+      18: iload_2
+      19: iload         4
+      21: bipush        18
+      23: imul
+      24: iadd
+      25: iload_3
+      26: invokespecial #146                // Method net/minecraft/screen/slot/Slot."<init>":(Lnet/minecraft/inventory/Inventory;III)V
+      29: invokevirtual #150                // Method addSlot:(Lnet/minecraft/screen/slot/Slot;)Lnet/minecraft/screen/slot/Slot;
+      32: pop
+      33: iinc          4, 1
+      36: goto          3
+      39: return
+
+  protected void addPlayerInventorySlots(net.minecraft.inventory.Inventory, int, int);
+    Code:
+       0: iconst_0
+       1: istore        4
+       3: iload         4
+       5: iconst_3
+       6: if_icmpge     68
+       9: iconst_0
+      10: istore        5
+      12: iload         5
+      14: bipush        9
+      16: if_icmpge     62
+      19: aload_0
+      20: new           #143                // class net/minecraft/screen/slot/Slot
+      23: dup
+      24: aload_1
+      25: iload         5
+      27: iload         4
+      29: iconst_1
+      30: iadd
+      31: bipush        9
+      33: imul
+      34: iadd
+      35: iload_2
+      36: iload         5
+      38: bipush        18
+      40: imul
+      41: iadd
+      42: iload_3
+      43: iload         4
+      45: bipush        18
+      47: imul
+      48: iadd
+      49: invokespecial #146                // Method net/minecraft/screen/slot/Slot."<init>":(Lnet/minecraft/inventory/Inventory;III)V
+      52: invokevirtual #150                // Method addSlot:(Lnet/minecraft/screen/slot/Slot;)Lnet/minecraft/screen/slot/Slot;
+      55: pop
+      56: iinc          5, 1
+      59: goto          12
+      62: iinc          4, 1
+      65: goto          3
+      68: return
+
+  protected void addPlayerSlots(net.minecraft.inventory.Inventory, int, int);
+    Code:
+       0: aload_0
+       1: aload_1
+       2: iload_2
+       3: iload_3
+       4: invokevirtual #158                // Method addPlayerInventorySlots:(Lnet/minecraft/inventory/Inventory;II)V
+       7: iconst_4
+       8: istore        4
+      10: bipush        58
+      12: istore        5
+      14: aload_0
+      15: aload_1
+      16: iload_2
+      17: iload_3
+      18: bipush        58
+      20: iadd
+      21: invokevirtual #160                // Method addPlayerHotbarSlots:(Lnet/minecraft/inventory/Inventory;II)V
+      24: return
+
+  protected static boolean canUse(net.minecraft.screen.ScreenHandlerContext, net.minecraft.entity.player.PlayerEntity, net.minecraft.block.Block);
+    Code:
+       0: aload_0
+       1: aload_2
+       2: aload_1
+       3: invokedynamic #185,  0            // InvokeDynamic #0:apply:(Lnet/minecraft/block/Block;Lnet/minecraft/entity/player/PlayerEntity;)Ljava/util/function/BiFunction;
+       8: iconst_1
+       9: invokestatic  #191                // Method java/lang/Boolean.valueOf:(Z)Ljava/lang/Boolean;
+      12: invokeinterface #197,  3          // InterfaceMethod net/minecraft/screen/ScreenHandlerContext.get:(Ljava/util/function/BiFunction;Ljava/lang/Object;)Ljava/lang/Object;
+      17: checkcast     #187                // class java/lang/Boolean
+      20: invokevirtual #201                // Method java/lang/Boolean.booleanValue:()Z
+      23: ireturn
+
+  public net.minecraft.screen.ScreenHandlerType<?> getType();
+    Code:
+       0: aload_0
+       1: getfield      #132                // Field type:Lnet/minecraft/screen/ScreenHandlerType;
+       4: ifnonnull     17
+       7: new           #209                // class java/lang/UnsupportedOperationException
+      10: dup
+      11: ldc           #211                // String Unable to construct this menu by type
+      13: invokespecial #214                // Method java/lang/UnsupportedOperationException."<init>":(Ljava/lang/String;)V
+      16: athrow
+      17: aload_0
+      18: getfield      #132                // Field type:Lnet/minecraft/screen/ScreenHandlerType;
+      21: areturn
+
+  protected static void checkSize(net.minecraft.inventory.Inventory, int);
+    Code:
+       0: aload_0
+       1: invokeinterface #224,  1          // InterfaceMethod net/minecraft/inventory/Inventory.size:()I
+       6: istore_2
+       7: iload_2
+       8: iload_1
+       9: if_icmpge     27
+      12: new           #226                // class java/lang/IllegalArgumentException
+      15: dup
+      16: iload_2
+      17: iload_1
+      18: invokedynamic #238,  0            // InvokeDynamic #1:makeConcatWithConstants:(II)Ljava/lang/String;
+      23: invokespecial #239                // Method java/lang/IllegalArgumentException."<init>":(Ljava/lang/String;)V
+      26: athrow
+      27: return
+
+  protected static void checkDataCount(net.minecraft.screen.PropertyDelegate, int);
+    Code:
+       0: aload_0
+       1: invokeinterface #246,  1          // InterfaceMethod net/minecraft/screen/PropertyDelegate.size:()I
+       6: istore_2
+       7: iload_2
+       8: iload_1
+       9: if_icmpge     27
+      12: new           #226                // class java/lang/IllegalArgumentException
+      15: dup
+      16: iload_2
+      17: iload_1
+      18: invokedynamic #249,  0            // InvokeDynamic #2:makeConcatWithConstants:(II)Ljava/lang/String;
+      23: invokespecial #239                // Method java/lang/IllegalArgumentException."<init>":(Ljava/lang/String;)V
+      26: athrow
+      27: return
+
+  public boolean isValid(int);
+    Code:
+       0: iload_1
+       1: iconst_m1
+       2: if_icmpeq     23
+       5: iload_1
+       6: sipush        -999
+       9: if_icmpeq     23
+      12: iload_1
+      13: aload_0
+      14: getfield      #91                 // Field slots:Lnet/minecraft/util/collection/DefaultedList;
+      17: invokevirtual #254                // Method net/minecraft/util/collection/DefaultedList.size:()I
+      20: if_icmpge     27
+      23: iconst_1
+      24: goto          28
+      27: iconst_0
+      28: ireturn
+
+  protected net.minecraft.screen.slot.Slot addSlot(net.minecraft.screen.slot.Slot);
+    Code:
+       0: aload_1
+       1: aload_0
+       2: getfield      #91                 // Field slots:Lnet/minecraft/util/collection/DefaultedList;
+       5: invokevirtual #254                // Method net/minecraft/util/collection/DefaultedList.size:()I
+       8: putfield      #257                // Field net/minecraft/screen/slot/Slot.id:I
+      11: aload_0
+      12: getfield      #91                 // Field slots:Lnet/minecraft/util/collection/DefaultedList;
+      15: aload_1
+      16: invokevirtual #261                // Method net/minecraft/util/collection/DefaultedList.add:(Ljava/lang/Object;)Z
+      19: pop
+      20: aload_0
+      21: getfield      #89                 // Field trackedStacks:Lnet/minecraft/util/collection/DefaultedList;
+      24: getstatic     #104                // Field net/minecraft/item/ItemStack.EMPTY:Lnet/minecraft/item/ItemStack;
+      27: invokevirtual #261                // Method net/minecraft/util/collection/DefaultedList.add:(Ljava/lang/Object;)Z
+      30: pop
+      31: aload_0
+      32: getfield      #108                // Field trackedSlots:Lnet/minecraft/util/collection/DefaultedList;
+      35: aload_0
+      36: getfield      #263                // Field syncHandler:Lnet/minecraft/screen/ScreenHandlerSyncHandler;
+      39: ifnull        54
+      42: aload_0
+      43: getfield      #263                // Field syncHandler:Lnet/minecraft/screen/ScreenHandlerSyncHandler;
+      46: invokeinterface #269,  1          // InterfaceMethod net/minecraft/screen/ScreenHandlerSyncHandler.createTrackedSlot:()Lnet/minecraft/screen/sync/TrackedSlot;
+      51: goto          57
+      54: getstatic     #116                // Field net/minecraft/screen/sync/TrackedSlot.ALWAYS_IN_SYNC:Lnet/minecraft/screen/sync/TrackedSlot;
+      57: invokevirtual #261                // Method net/minecraft/util/collection/DefaultedList.add:(Ljava/lang/Object;)Z
+      60: pop
+      61: aload_1
+      62: areturn
+
+  protected net.minecraft.screen.Property addProperty(net.minecraft.screen.Property);
+    Code:
+       0: aload_0
+       1: getfield      #99                 // Field properties:Ljava/util/List;
+       4: aload_1
+       5: invokeinterface #276,  2          // InterfaceMethod java/util/List.add:(Ljava/lang/Object;)Z
+      10: pop
+      11: aload_0
+      12: getfield      #113                // Field trackedPropertyValues:Lit/unimi/dsi/fastutil/ints/IntList;
+      15: iconst_0
+      16: invokeinterface #280,  2          // InterfaceMethod it/unimi/dsi/fastutil/ints/IntList.add:(I)Z
+      21: pop
+      22: aload_1
+      23: areturn
+
+  protected void addProperties(net.minecraft.screen.PropertyDelegate);
+    Code:
+       0: iconst_0
+       1: istore_2
+       2: iload_2
+       3: aload_1
+       4: invokeinterface #246,  1          // InterfaceMethod net/minecraft/screen/PropertyDelegate.size:()I
+       9: if_icmpge     28
+      12: aload_0
+      13: aload_1
+      14: iload_2
+      15: invokestatic  #290                // Method net/minecraft/screen/Property.create:(Lnet/minecraft/screen/PropertyDelegate;I)Lnet/minecraft/screen/Property;
+      18: invokevirtual #292                // Method addProperty:(Lnet/minecraft/screen/Property;)Lnet/minecraft/screen/Property;
+      21: pop
+      22: iinc          2, 1
+      25: goto          2
+      28: return
+
+  public void addListener(net.minecraft.screen.ScreenHandlerListener);
+    Code:
+       0: aload_0
+       1: getfield      #130                // Field listeners:Ljava/util/List;
+       4: aload_1
+       5: invokeinterface #298,  2          // InterfaceMethod java/util/List.contains:(Ljava/lang/Object;)Z
+      10: ifeq          14
+      13: return
+      14: aload_0
+      15: getfield      #130                // Field listeners:Ljava/util/List;
+      18: aload_1
+      19: invokeinterface #276,  2          // InterfaceMethod java/util/List.add:(Ljava/lang/Object;)Z
+      24: pop
+      25: aload_0
+      26: invokevirtual #301                // Method sendContentUpdates:()V
+      29: return
+
+  public void updateSyncHandler(net.minecraft.screen.ScreenHandlerSyncHandler);
+    Code:
+       0: aload_0
+       1: aload_1
+       2: putfield      #263                // Field syncHandler:Lnet/minecraft/screen/ScreenHandlerSyncHandler;
+       5: aload_0
+       6: aload_1
+       7: invokeinterface #269,  1          // InterfaceMethod net/minecraft/screen/ScreenHandlerSyncHandler.createTrackedSlot:()Lnet/minecraft/screen/sync/TrackedSlot;
+      12: putfield      #118                // Field trackedCursorSlot:Lnet/minecraft/screen/sync/TrackedSlot;
+      15: aload_0
+      16: getfield      #108                // Field trackedSlots:Lnet/minecraft/util/collection/DefaultedList;
+      19: aload_1
+      20: invokedynamic #317,  0            // InvokeDynamic #3:apply:(Lnet/minecraft/screen/ScreenHandlerSyncHandler;)Ljava/util/function/UnaryOperator;
+      25: invokevirtual #321                // Method net/minecraft/util/collection/DefaultedList.replaceAll:(Ljava/util/function/UnaryOperator;)V
+      28: aload_0
+      29: invokevirtual #324                // Method syncState:()V
+      32: return
+
+  public void syncState();
+    Code:
+       0: new           #326                // class java/util/ArrayList
+       3: dup
+       4: aload_0
+       5: getfield      #91                 // Field slots:Lnet/minecraft/util/collection/DefaultedList;
+       8: invokevirtual #254                // Method net/minecraft/util/collection/DefaultedList.size:()I
+      11: invokespecial #329                // Method java/util/ArrayList."<init>":(I)V
+      14: astore_1
+      15: iconst_0
+      16: istore_2
+      17: aload_0
+      18: getfield      #91                 // Field slots:Lnet/minecraft/util/collection/DefaultedList;
+      21: invokevirtual #254                // Method net/minecraft/util/collection/DefaultedList.size:()I
+      24: istore_3
+      25: iload_2
+      26: iload_3
+      27: if_icmpge     82
+      30: aload_0
+      31: getfield      #91                 // Field slots:Lnet/minecraft/util/collection/DefaultedList;
+      34: iload_2
+      35: invokevirtual #332                // Method net/minecraft/util/collection/DefaultedList.get:(I)Ljava/lang/Object;
+      38: checkcast     #143                // class net/minecraft/screen/slot/Slot
+      41: invokevirtual #336                // Method net/minecraft/screen/slot/Slot.getStack:()Lnet/minecraft/item/ItemStack;
+      44: astore        4
+      46: aload_1
+      47: aload         4
+      49: invokevirtual #339                // Method net/minecraft/item/ItemStack.copy:()Lnet/minecraft/item/ItemStack;
+      52: invokeinterface #276,  2          // InterfaceMethod java/util/List.add:(Ljava/lang/Object;)Z
+      57: pop
+      58: aload_0
+      59: getfield      #108                // Field trackedSlots:Lnet/minecraft/util/collection/DefaultedList;
+      62: iload_2
+      63: invokevirtual #332                // Method net/minecraft/util/collection/DefaultedList.get:(I)Ljava/lang/Object;
+      66: checkcast     #16                 // class net/minecraft/screen/sync/TrackedSlot
+      69: aload         4
+      71: invokeinterface #343,  2          // InterfaceMethod net/minecraft/screen/sync/TrackedSlot.setReceivedStack:(Lnet/minecraft/item/ItemStack;)V
+      76: iinc          2, 1
+      79: goto          25
+      82: aload_0
+      83: invokevirtual #346                // Method getCursorStack:()Lnet/minecraft/item/ItemStack;
+      86: astore_2
+      87: aload_0
+      88: getfield      #118                // Field trackedCursorSlot:Lnet/minecraft/screen/sync/TrackedSlot;
+      91: aload_2
+      92: invokeinterface #343,  2          // InterfaceMethod net/minecraft/screen/sync/TrackedSlot.setReceivedStack:(Lnet/minecraft/item/ItemStack;)V
+      97: iconst_0
+      98: istore_3
+      99: aload_0
+     100: getfield      #99                 // Field properties:Ljava/util/List;
+     103: invokeinterface #347,  1          // InterfaceMethod java/util/List.size:()I
+     108: istore        4
+     110: iload_3
+     111: iload         4
+     113: if_icmpge     149
+     116: aload_0
+     117: getfield      #113                // Field trackedPropertyValues:Lit/unimi/dsi/fastutil/ints/IntList;
+     120: iload_3
+     121: aload_0
+     122: getfield      #99                 // Field properties:Ljava/util/List;
+     125: iload_3
+     126: invokeinterface #348,  2          // InterfaceMethod java/util/List.get:(I)Ljava/lang/Object;
+     131: checkcast     #286                // class net/minecraft/screen/Property
+     134: invokevirtual #350                // Method net/minecraft/screen/Property.get:()I
+     137: invokeinterface #354,  3          // InterfaceMethod it/unimi/dsi/fastutil/ints/IntList.set:(II)I
+     142: pop
+     143: iinc          3, 1
+     146: goto          110
+     149: aload_0
+     150: getfield      #263                // Field syncHandler:Lnet/minecraft/screen/ScreenHandlerSyncHandler;
+     153: ifnull        180
+     156: aload_0
+     157: getfield      #263                // Field syncHandler:Lnet/minecraft/screen/ScreenHandlerSyncHandler;
+     160: aload_0
+     161: aload_1
+     162: aload_2
+     163: invokevirtual #339                // Method net/minecraft/item/ItemStack.copy:()Lnet/minecraft/item/ItemStack;
+     166: aload_0
+     167: getfield      #113                // Field trackedPropertyValues:Lit/unimi/dsi/fastutil/ints/IntList;
+     170: invokeinterface #358,  1          // InterfaceMethod it/unimi/dsi/fastutil/ints/IntList.toIntArray:()[I
+     175: invokeinterface #362,  5          // InterfaceMethod net/minecraft/screen/ScreenHandlerSyncHandler.updateState:(Lnet/minecraft/screen/ScreenHandler;Ljava/util/List;Lnet/minecraft/item/ItemStack;[I)V
+     180: return
+
+  public void removeListener(net.minecraft.screen.ScreenHandlerListener);
+    Code:
+       0: aload_0
+       1: getfield      #130                // Field listeners:Ljava/util/List;
+       4: aload_1
+       5: invokeinterface #371,  2          // InterfaceMethod java/util/List.remove:(Ljava/lang/Object;)Z
+      10: pop
+      11: return
+
+  public net.minecraft.util.collection.DefaultedList<net.minecraft.item.ItemStack> getStacks();
+    Code:
+       0: invokestatic  #87                 // Method net/minecraft/util/collection/DefaultedList.of:()Lnet/minecraft/util/collection/DefaultedList;
+       3: astore_1
+       4: aload_0
+       5: getfield      #91                 // Field slots:Lnet/minecraft/util/collection/DefaultedList;
+       8: invokevirtual #377                // Method net/minecraft/util/collection/DefaultedList.iterator:()Ljava/util/Iterator;
+      11: astore_2
+      12: aload_2
+      13: invokeinterface #382,  1          // InterfaceMethod java/util/Iterator.hasNext:()Z
+      18: ifeq          43
+      21: aload_2
+      22: invokeinterface #386,  1          // InterfaceMethod java/util/Iterator.next:()Ljava/lang/Object;
+      27: checkcast     #143                // class net/minecraft/screen/slot/Slot
+      30: astore_3
+      31: aload_1
+      32: aload_3
+      33: invokevirtual #336                // Method net/minecraft/screen/slot/Slot.getStack:()Lnet/minecraft/item/ItemStack;
+      36: invokevirtual #261                // Method net/minecraft/util/collection/DefaultedList.add:(Ljava/lang/Object;)Z
+      39: pop
+      40: goto          12
+      43: aload_1
+      44: areturn
+
+  public void sendContentUpdates();
+    Code:
+       0: iconst_0
+       1: istore_1
+       2: iload_1
+       3: aload_0
+       4: getfield      #91                 // Field slots:Lnet/minecraft/util/collection/DefaultedList;
+       7: invokevirtual #254                // Method net/minecraft/util/collection/DefaultedList.size:()I
+      10: if_icmpge     63
+      13: aload_0
+      14: getfield      #91                 // Field slots:Lnet/minecraft/util/collection/DefaultedList;
+      17: iload_1
+      18: invokevirtual #332                // Method net/minecraft/util/collection/DefaultedList.get:(I)Ljava/lang/Object;
+      21: checkcast     #143                // class net/minecraft/screen/slot/Slot
+      24: invokevirtual #336                // Method net/minecraft/screen/slot/Slot.getStack:()Lnet/minecraft/item/ItemStack;
+      27: astore_2
+      28: aload_2
+      29: dup
+      30: invokestatic  #392                // Method java/util/Objects.requireNonNull:(Ljava/lang/Object;)Ljava/lang/Object;
+      33: pop
+      34: invokedynamic #398,  0            // InvokeDynamic #4:get:(Lnet/minecraft/item/ItemStack;)Lcom/google/common/base/Supplier;
+      39: invokestatic  #404                // Method com/google/common/base/Suppliers.memoize:(Lcom/google/common/base/Supplier;)Lcom/google/common/base/Supplier;
+      42: astore_3
+      43: aload_0
+      44: iload_1
+      45: aload_2
+      46: aload_3
+      47: invokevirtual #408                // Method updateTrackedSlot:(ILnet/minecraft/item/ItemStack;Ljava/util/function/Supplier;)V
+      50: aload_0
+      51: iload_1
+      52: aload_2
+      53: aload_3
+      54: invokevirtual #411                // Method checkSlotUpdates:(ILnet/minecraft/item/ItemStack;Ljava/util/function/Supplier;)V
+      57: iinc          1, 1
+      60: goto          2
+      63: aload_0
+      64: invokevirtual #414                // Method checkCursorStackUpdates:()V
+      67: iconst_0
+      68: istore_1
+      69: iload_1
+      70: aload_0
+      71: getfield      #99                 // Field properties:Ljava/util/List;
+      74: invokeinterface #347,  1          // InterfaceMethod java/util/List.size:()I
+      79: if_icmpge     126
+      82: aload_0
+      83: getfield      #99                 // Field properties:Ljava/util/List;
+      86: iload_1
+      87: invokeinterface #348,  2          // InterfaceMethod java/util/List.get:(I)Ljava/lang/Object;
+      92: checkcast     #286                // class net/minecraft/screen/Property
+      95: astore_2
+      96: aload_2
+      97: invokevirtual #350                // Method net/minecraft/screen/Property.get:()I
+     100: istore_3
+     101: aload_2
+     102: invokevirtual #417                // Method net/minecraft/screen/Property.hasChanged:()Z
+     105: ifeq          114
+     108: aload_0
+     109: iload_1
+     110: iload_3
+     111: invokevirtual #421                // Method notifyPropertyUpdate:(II)V
+     114: aload_0
+     115: iload_1
+     116: iload_3
+     117: invokevirtual #424                // Method checkPropertyUpdates:(II)V
+     120: iinc          1, 1
+     123: goto          69
+     126: return
+
+  public void updateToClient();
+    Code:
+       0: iconst_0
+       1: istore_1
+       2: iload_1
+       3: aload_0
+       4: getfield      #91                 // Field slots:Lnet/minecraft/util/collection/DefaultedList;
+       7: invokevirtual #254                // Method net/minecraft/util/collection/DefaultedList.size:()I
+      10: if_icmpge     51
+      13: aload_0
+      14: getfield      #91                 // Field slots:Lnet/minecraft/util/collection/DefaultedList;
+      17: iload_1
+      18: invokevirtual #332                // Method net/minecraft/util/collection/DefaultedList.get:(I)Ljava/lang/Object;
+      21: checkcast     #143                // class net/minecraft/screen/slot/Slot
+      24: invokevirtual #336                // Method net/minecraft/screen/slot/Slot.getStack:()Lnet/minecraft/item/ItemStack;
+      27: astore_2
+      28: aload_0
+      29: iload_1
+      30: aload_2
+      31: aload_2
+      32: dup
+      33: invokestatic  #392                // Method java/util/Objects.requireNonNull:(Ljava/lang/Object;)Ljava/lang/Object;
+      36: pop
+      37: invokedynamic #431,  0            // InvokeDynamic #4:get:(Lnet/minecraft/item/ItemStack;)Ljava/util/function/Supplier;
+      42: invokevirtual #408                // Method updateTrackedSlot:(ILnet/minecraft/item/ItemStack;Ljava/util/function/Supplier;)V
+      45: iinc          1, 1
+      48: goto          2
+      51: iconst_0
+      52: istore_1
+      53: iload_1
+      54: aload_0
+      55: getfield      #99                 // Field properties:Ljava/util/List;
+      58: invokeinterface #347,  1          // InterfaceMethod java/util/List.size:()I
+      63: if_icmpge     102
+      66: aload_0
+      67: getfield      #99                 // Field properties:Ljava/util/List;
+      70: iload_1
+      71: invokeinterface #348,  2          // InterfaceMethod java/util/List.get:(I)Ljava/lang/Object;
+      76: checkcast     #286                // class net/minecraft/screen/Property
+      79: astore_2
+      80: aload_2
+      81: invokevirtual #417                // Method net/minecraft/screen/Property.hasChanged:()Z
+      84: ifeq          96
+      87: aload_0
+      88: iload_1
+      89: aload_2
+      90: invokevirtual #350                // Method net/minecraft/screen/Property.get:()I
+      93: invokevirtual #421                // Method notifyPropertyUpdate:(II)V
+      96: iinc          1, 1
+      99: goto          53
+     102: aload_0
+     103: invokevirtual #324                // Method syncState:()V
+     106: return
+
+  private void notifyPropertyUpdate(int, int);
+    Code:
+       0: aload_0
+       1: getfield      #130                // Field listeners:Ljava/util/List;
+       4: invokeinterface #434,  1          // InterfaceMethod java/util/List.iterator:()Ljava/util/Iterator;
+       9: astore_3
+      10: aload_3
+      11: invokeinterface #382,  1          // InterfaceMethod java/util/Iterator.hasNext:()Z
+      16: ifeq          43
+      19: aload_3
+      20: invokeinterface #386,  1          // InterfaceMethod java/util/Iterator.next:()Ljava/lang/Object;
+      25: checkcast     #436                // class net/minecraft/screen/ScreenHandlerListener
+      28: astore        4
+      30: aload         4
+      32: aload_0
+      33: iload_1
+      34: iload_2
+      35: invokeinterface #440,  4          // InterfaceMethod net/minecraft/screen/ScreenHandlerListener.onPropertyUpdate:(Lnet/minecraft/screen/ScreenHandler;II)V
+      40: goto          10
+      43: return
+
+  private void updateTrackedSlot(int, net.minecraft.item.ItemStack, java.util.function.Supplier<net.minecraft.item.ItemStack>);
+    Code:
+       0: aload_0
+       1: getfield      #89                 // Field trackedStacks:Lnet/minecraft/util/collection/DefaultedList;
+       4: iload_1
+       5: invokevirtual #332                // Method net/minecraft/util/collection/DefaultedList.get:(I)Ljava/lang/Object;
+       8: checkcast     #101                // class net/minecraft/item/ItemStack
+      11: astore        4
+      13: aload         4
+      15: aload_2
+      16: invokestatic  #448                // Method net/minecraft/item/ItemStack.areEqual:(Lnet/minecraft/item/ItemStack;Lnet/minecraft/item/ItemStack;)Z
+      19: ifne          91
+      22: aload_3
+      23: invokeinterface #452,  1          // InterfaceMethod java/util/function/Supplier.get:()Ljava/lang/Object;
+      28: checkcast     #101                // class net/minecraft/item/ItemStack
+      31: astore        5
+      33: aload_0
+      34: getfield      #89                 // Field trackedStacks:Lnet/minecraft/util/collection/DefaultedList;
+      37: iload_1
+      38: aload         5
+      40: invokevirtual #455                // Method net/minecraft/util/collection/DefaultedList.set:(ILjava/lang/Object;)Ljava/lang/Object;
+      43: pop
+      44: aload_0
+      45: getfield      #130                // Field listeners:Ljava/util/List;
+      48: invokeinterface #434,  1          // InterfaceMethod java/util/List.iterator:()Ljava/util/Iterator;
+      53: astore        6
+      55: aload         6
+      57: invokeinterface #382,  1          // InterfaceMethod java/util/Iterator.hasNext:()Z
+      62: ifeq          91
+      65: aload         6
+      67: invokeinterface #386,  1          // InterfaceMethod java/util/Iterator.next:()Ljava/lang/Object;
+      72: checkcast     #436                // class net/minecraft/screen/ScreenHandlerListener
+      75: astore        7
+      77: aload         7
+      79: aload_0
+      80: iload_1
+      81: aload         5
+      83: invokeinterface #459,  4          // InterfaceMethod net/minecraft/screen/ScreenHandlerListener.onSlotUpdate:(Lnet/minecraft/screen/ScreenHandler;ILnet/minecraft/item/ItemStack;)V
+      88: goto          55
+      91: return
+
+  private void checkSlotUpdates(int, net.minecraft.item.ItemStack, java.util.function.Supplier<net.minecraft.item.ItemStack>);
+    Code:
+       0: aload_0
+       1: getfield      #461                // Field disableSync:Z
+       4: ifeq          8
+       7: return
+       8: aload_0
+       9: getfield      #108                // Field trackedSlots:Lnet/minecraft/util/collection/DefaultedList;
+      12: iload_1
+      13: invokevirtual #332                // Method net/minecraft/util/collection/DefaultedList.get:(I)Ljava/lang/Object;
+      16: checkcast     #16                 // class net/minecraft/screen/sync/TrackedSlot
+      19: astore        4
+      21: aload         4
+      23: aload_2
+      24: invokeinterface #465,  2          // InterfaceMethod net/minecraft/screen/sync/TrackedSlot.isInSync:(Lnet/minecraft/item/ItemStack;)Z
+      29: ifne          67
+      32: aload         4
+      34: aload_2
+      35: invokeinterface #343,  2          // InterfaceMethod net/minecraft/screen/sync/TrackedSlot.setReceivedStack:(Lnet/minecraft/item/ItemStack;)V
+      40: aload_0
+      41: getfield      #263                // Field syncHandler:Lnet/minecraft/screen/ScreenHandlerSyncHandler;
+      44: ifnull        67
+      47: aload_0
+      48: getfield      #263                // Field syncHandler:Lnet/minecraft/screen/ScreenHandlerSyncHandler;
+      51: aload_0
+      52: iload_1
+      53: aload_3
+      54: invokeinterface #452,  1          // InterfaceMethod java/util/function/Supplier.get:()Ljava/lang/Object;
+      59: checkcast     #101                // class net/minecraft/item/ItemStack
+      62: invokeinterface #468,  4          // InterfaceMethod net/minecraft/screen/ScreenHandlerSyncHandler.updateSlot:(Lnet/minecraft/screen/ScreenHandler;ILnet/minecraft/item/ItemStack;)V
+      67: return
+
+  private void checkPropertyUpdates(int, int);
+    Code:
+       0: aload_0
+       1: getfield      #461                // Field disableSync:Z
+       4: ifeq          8
+       7: return
+       8: aload_0
+       9: getfield      #113                // Field trackedPropertyValues:Lit/unimi/dsi/fastutil/ints/IntList;
+      12: iload_1
+      13: invokeinterface #473,  2          // InterfaceMethod it/unimi/dsi/fastutil/ints/IntList.getInt:(I)I
+      18: istore_3
+      19: iload_3
+      20: iload_2
+      21: if_icmpeq     55
+      24: aload_0
+      25: getfield      #113                // Field trackedPropertyValues:Lit/unimi/dsi/fastutil/ints/IntList;
+      28: iload_1
+      29: iload_2
+      30: invokeinterface #354,  3          // InterfaceMethod it/unimi/dsi/fastutil/ints/IntList.set:(II)I
+      35: pop
+      36: aload_0
+      37: getfield      #263                // Field syncHandler:Lnet/minecraft/screen/ScreenHandlerSyncHandler;
+      40: ifnull        55
+      43: aload_0
+      44: getfield      #263                // Field syncHandler:Lnet/minecraft/screen/ScreenHandlerSyncHandler;
+      47: aload_0
+      48: iload_1
+      49: iload_2
+      50: invokeinterface #476,  4          // InterfaceMethod net/minecraft/screen/ScreenHandlerSyncHandler.updateProperty:(Lnet/minecraft/screen/ScreenHandler;II)V
+      55: return
+
+  private void checkCursorStackUpdates();
+    Code:
+       0: aload_0
+       1: getfield      #461                // Field disableSync:Z
+       4: ifeq          8
+       7: return
+       8: aload_0
+       9: invokevirtual #346                // Method getCursorStack:()Lnet/minecraft/item/ItemStack;
+      12: astore_1
+      13: aload_0
+      14: getfield      #118                // Field trackedCursorSlot:Lnet/minecraft/screen/sync/TrackedSlot;
+      17: aload_1
+      18: invokeinterface #465,  2          // InterfaceMethod net/minecraft/screen/sync/TrackedSlot.isInSync:(Lnet/minecraft/item/ItemStack;)Z
+      23: ifne          57
+      26: aload_0
+      27: getfield      #118                // Field trackedCursorSlot:Lnet/minecraft/screen/sync/TrackedSlot;
+      30: aload_1
+      31: invokeinterface #343,  2          // InterfaceMethod net/minecraft/screen/sync/TrackedSlot.setReceivedStack:(Lnet/minecraft/item/ItemStack;)V
+      36: aload_0
+      37: getfield      #263                // Field syncHandler:Lnet/minecraft/screen/ScreenHandlerSyncHandler;
+      40: ifnull        57
+      43: aload_0
+      44: getfield      #263                // Field syncHandler:Lnet/minecraft/screen/ScreenHandlerSyncHandler;
+      47: aload_0
+      48: aload_1
+      49: invokevirtual #339                // Method net/minecraft/item/ItemStack.copy:()Lnet/minecraft/item/ItemStack;
+      52: invokeinterface #480,  3          // InterfaceMethod net/minecraft/screen/ScreenHandlerSyncHandler.updateCursorStack:(Lnet/minecraft/screen/ScreenHandler;Lnet/minecraft/item/ItemStack;)V
+      57: return
+
+  public void setReceivedStack(int, net.minecraft.item.ItemStack);
+    Code:
+       0: aload_0
+       1: getfield      #108                // Field trackedSlots:Lnet/minecraft/util/collection/DefaultedList;
+       4: iload_1
+       5: invokevirtual #332                // Method net/minecraft/util/collection/DefaultedList.get:(I)Ljava/lang/Object;
+       8: checkcast     #16                 // class net/minecraft/screen/sync/TrackedSlot
+      11: aload_2
+      12: invokeinterface #343,  2          // InterfaceMethod net/minecraft/screen/sync/TrackedSlot.setReceivedStack:(Lnet/minecraft/item/ItemStack;)V
+      17: return
+
+  public void setReceivedHash(int, net.minecraft.screen.sync.ItemStackHash);
+    Code:
+       0: iload_1
+       1: iflt          15
+       4: iload_1
+       5: aload_0
+       6: getfield      #108                // Field trackedSlots:Lnet/minecraft/util/collection/DefaultedList;
+       9: invokevirtual #254                // Method net/minecraft/util/collection/DefaultedList.size:()I
+      12: if_icmplt     41
+      15: getstatic     #486                // Field LOGGER:Lorg/slf4j/Logger;
+      18: ldc_w         #488                // String Incorrect slot index: {} available slots: {}
+      21: iload_1
+      22: invokestatic  #493                // Method java/lang/Integer.valueOf:(I)Ljava/lang/Integer;
+      25: aload_0
+      26: getfield      #108                // Field trackedSlots:Lnet/minecraft/util/collection/DefaultedList;
+      29: invokevirtual #254                // Method net/minecraft/util/collection/DefaultedList.size:()I
+      32: invokestatic  #493                // Method java/lang/Integer.valueOf:(I)Ljava/lang/Integer;
+      35: invokeinterface #499,  4          // InterfaceMethod org/slf4j/Logger.debug:(Ljava/lang/String;Ljava/lang/Object;Ljava/lang/Object;)V
+      40: return
+      41: aload_0
+      42: getfield      #108                // Field trackedSlots:Lnet/minecraft/util/collection/DefaultedList;
+      45: iload_1
+      46: invokevirtual #332                // Method net/minecraft/util/collection/DefaultedList.get:(I)Ljava/lang/Object;
+      49: checkcast     #16                 // class net/minecraft/screen/sync/TrackedSlot
+      52: aload_2
+      53: invokeinterface #504,  2          // InterfaceMethod net/minecraft/screen/sync/TrackedSlot.setReceivedHash:(Lnet/minecraft/screen/sync/ItemStackHash;)V
+      58: return
+
+  public void setReceivedCursorHash(net.minecraft.screen.sync.ItemStackHash);
+    Code:
+       0: aload_0
+       1: getfield      #118                // Field trackedCursorSlot:Lnet/minecraft/screen/sync/TrackedSlot;
+       4: aload_1
+       5: invokeinterface #504,  2          // InterfaceMethod net/minecraft/screen/sync/TrackedSlot.setReceivedHash:(Lnet/minecraft/screen/sync/ItemStackHash;)V
+      10: return
+
+  public boolean onButtonClick(net.minecraft.entity.player.PlayerEntity, int);
+    Code:
+       0: iconst_0
+       1: ireturn
+
+  public net.minecraft.screen.slot.Slot getSlot(int);
+    Code:
+       0: aload_0
+       1: getfield      #91                 // Field slots:Lnet/minecraft/util/collection/DefaultedList;
+       4: iload_1
+       5: invokevirtual #332                // Method net/minecraft/util/collection/DefaultedList.get:(I)Ljava/lang/Object;
+       8: checkcast     #143                // class net/minecraft/screen/slot/Slot
+      11: areturn
+
+  public abstract net.minecraft.item.ItemStack quickMove(net.minecraft.entity.player.PlayerEntity, int);
+
+  public void selectBundleStack(int, int);
+    Code:
+       0: iload_1
+       1: iflt          35
+       4: iload_1
+       5: aload_0
+       6: getfield      #91                 // Field slots:Lnet/minecraft/util/collection/DefaultedList;
+       9: invokevirtual #254                // Method net/minecraft/util/collection/DefaultedList.size:()I
+      12: if_icmpge     35
+      15: aload_0
+      16: getfield      #91                 // Field slots:Lnet/minecraft/util/collection/DefaultedList;
+      19: iload_1
+      20: invokevirtual #332                // Method net/minecraft/util/collection/DefaultedList.get:(I)Ljava/lang/Object;
+      23: checkcast     #143                // class net/minecraft/screen/slot/Slot
+      26: invokevirtual #336                // Method net/minecraft/screen/slot/Slot.getStack:()Lnet/minecraft/item/ItemStack;
+      29: astore_3
+      30: aload_3
+      31: iload_2
+      32: invokestatic  #521                // Method net/minecraft/item/BundleItem.setSelectedStackIndex:(Lnet/minecraft/item/ItemStack;I)V
+      35: return
+
+  public void onSlotClick(int, int, net.minecraft.screen.slot.SlotActionType, net.minecraft.entity.player.PlayerEntity);
+    Code:
+       0: aload_0
+       1: iload_1
+       2: iload_2
+       3: aload_3
+       4: aload         4
+       6: invokevirtual #531                // Method internalOnSlotClick:(IILnet/minecraft/screen/slot/SlotActionType;Lnet/minecraft/entity/player/PlayerEntity;)V
+       9: goto          129
+      12: astore        5
+      14: aload         5
+      16: ldc_w         #535                // String Container click
+      19: invokestatic  #540                // Method net/minecraft/util/crash/CrashReport.create:(Ljava/lang/Throwable;Ljava/lang/String;)Lnet/minecraft/util/crash/CrashReport;
+      22: astore        6
+      24: aload         6
+      26: ldc_w         #542                // String Click info
+      29: invokevirtual #546                // Method net/minecraft/util/crash/CrashReport.addElement:(Ljava/lang/String;)Lnet/minecraft/util/crash/CrashReportSection;
+      32: astore        7
+      34: aload         7
+      36: ldc_w         #548                // String Menu Type
+      39: aload_0
+      40: invokedynamic #558,  0            // InvokeDynamic #5:call:(Lnet/minecraft/screen/ScreenHandler;)Lnet/minecraft/util/crash/CrashCallable;
+      45: invokevirtual #563                // Method net/minecraft/util/crash/CrashReportSection.add:(Ljava/lang/String;Lnet/minecraft/util/crash/CrashCallable;)Lnet/minecraft/util/crash/CrashReportSection;
+      48: pop
+      49: aload         7
+      51: ldc_w         #565                // String Menu Class
+      54: aload_0
+      55: invokedynamic #570,  0            // InvokeDynamic #6:call:(Lnet/minecraft/screen/ScreenHandler;)Lnet/minecraft/util/crash/CrashCallable;
+      60: invokevirtual #563                // Method net/minecraft/util/crash/CrashReportSection.add:(Ljava/lang/String;Lnet/minecraft/util/crash/CrashCallable;)Lnet/minecraft/util/crash/CrashReportSection;
+      63: pop
+      64: aload         7
+      66: ldc_w         #572                // String Slot Count
+      69: aload_0
+      70: getfield      #91                 // Field slots:Lnet/minecraft/util/collection/DefaultedList;
+      73: invokevirtual #254                // Method net/minecraft/util/collection/DefaultedList.size:()I
+      76: invokestatic  #493                // Method java/lang/Integer.valueOf:(I)Ljava/lang/Integer;
+      79: invokevirtual #575                // Method net/minecraft/util/crash/CrashReportSection.add:(Ljava/lang/String;Ljava/lang/Object;)Lnet/minecraft/util/crash/CrashReportSection;
+      82: pop
+      83: aload         7
+      85: ldc_w         #577                // String Slot
+      88: iload_1
+      89: invokestatic  #493                // Method java/lang/Integer.valueOf:(I)Ljava/lang/Integer;
+      92: invokevirtual #575                // Method net/minecraft/util/crash/CrashReportSection.add:(Ljava/lang/String;Ljava/lang/Object;)Lnet/minecraft/util/crash/CrashReportSection;
+      95: pop
+      96: aload         7
+      98: ldc_w         #579                // String Button
+     101: iload_2
+     102: invokestatic  #493                // Method java/lang/Integer.valueOf:(I)Ljava/lang/Integer;
+     105: invokevirtual #575                // Method net/minecraft/util/crash/CrashReportSection.add:(Ljava/lang/String;Ljava/lang/Object;)Lnet/minecraft/util/crash/CrashReportSection;
+     108: pop
+     109: aload         7
+     111: ldc_w         #581                // String Type
+     114: aload_3
+     115: invokevirtual #575                // Method net/minecraft/util/crash/CrashReportSection.add:(Ljava/lang/String;Ljava/lang/Object;)Lnet/minecraft/util/crash/CrashReportSection;
+     118: pop
+     119: new           #583                // class net/minecraft/util/crash/CrashException
+     122: dup
+     123: aload         6
+     125: invokespecial #586                // Method net/minecraft/util/crash/CrashException."<init>":(Lnet/minecraft/util/crash/CrashReport;)V
+     128: athrow
+     129: return
+    Exception table:
+       from    to  target type
+           0     9    12   Class java/lang/Exception
+
+  private void internalOnSlotClick(int, int, net.minecraft.screen.slot.SlotActionType, net.minecraft.entity.player.PlayerEntity);
+    Code:
+       0: aload         4
+       2: invokevirtual #599                // Method net/minecraft/entity/player/PlayerEntity.getInventory:()Lnet/minecraft/entity/player/PlayerInventory;
+       5: astore        5
+       7: aload_3
+       8: getstatic     #602                // Field net/minecraft/screen/slot/SlotActionType.QUICK_CRAFT:Lnet/minecraft/screen/slot/SlotActionType;
+      11: if_acmpne     542
+      14: aload_0
+      15: getfield      #604                // Field quickCraftStage:I
+      18: istore        6
+      20: aload_0
+      21: iload_2
+      22: invokestatic  #607                // Method unpackQuickCraftStage:(I)I
+      25: putfield      #604                // Field quickCraftStage:I
+      28: iload         6
+      30: iconst_1
+      31: if_icmpne     42
+      34: aload_0
+      35: getfield      #604                // Field quickCraftStage:I
+      38: iconst_2
+      39: if_icmpeq     58
+      42: iload         6
+      44: aload_0
+      45: getfield      #604                // Field quickCraftStage:I
+      48: if_icmpeq     58
+      51: aload_0
+      52: invokevirtual #610                // Method endQuickCraft:()V
+      55: goto          539
+      58: aload_0
+      59: invokevirtual #346                // Method getCursorStack:()Lnet/minecraft/item/ItemStack;
+      62: invokevirtual #613                // Method net/minecraft/item/ItemStack.isEmpty:()Z
+      65: ifeq          75
+      68: aload_0
+      69: invokevirtual #610                // Method endQuickCraft:()V
+      72: goto          539
+      75: aload_0
+      76: getfield      #604                // Field quickCraftStage:I
+      79: ifne          126
+      82: aload_0
+      83: iload_2
+      84: invokestatic  #616                // Method unpackQuickCraftButton:(I)I
+      87: putfield      #120                // Field quickCraftButton:I
+      90: aload_0
+      91: getfield      #120                // Field quickCraftButton:I
+      94: aload         4
+      96: invokestatic  #620                // Method shouldQuickCraftContinue:(ILnet/minecraft/entity/player/PlayerEntity;)Z
+      99: ifeq          119
+     102: aload_0
+     103: iconst_1
+     104: putfield      #604                // Field quickCraftStage:I
+     107: aload_0
+     108: getfield      #128                // Field quickCraftSlots:Ljava/util/Set;
+     111: invokeinterface #625,  1          // InterfaceMethod java/util/Set.clear:()V
+     116: goto          539
+     119: aload_0
+     120: invokevirtual #610                // Method endQuickCraft:()V
+     123: goto          539
+     126: aload_0
+     127: getfield      #604                // Field quickCraftStage:I
+     130: iconst_1
+     131: if_icmpne     223
+     134: aload_0
+     135: getfield      #91                 // Field slots:Lnet/minecraft/util/collection/DefaultedList;
+     138: iload_1
+     139: invokevirtual #332                // Method net/minecraft/util/collection/DefaultedList.get:(I)Ljava/lang/Object;
+     142: checkcast     #143                // class net/minecraft/screen/slot/Slot
+     145: astore        7
+     147: aload_0
+     148: invokevirtual #346                // Method getCursorStack:()Lnet/minecraft/item/ItemStack;
+     151: astore        8
+     153: aload         7
+     155: aload         8
+     157: iconst_1
+     158: invokestatic  #629                // Method canInsertItemIntoSlot:(Lnet/minecraft/screen/slot/Slot;Lnet/minecraft/item/ItemStack;Z)Z
+     161: ifeq          220
+     164: aload         7
+     166: aload         8
+     168: invokevirtual #632                // Method net/minecraft/screen/slot/Slot.canInsert:(Lnet/minecraft/item/ItemStack;)Z
+     171: ifeq          220
+     174: aload_0
+     175: getfield      #120                // Field quickCraftButton:I
+     178: iconst_2
+     179: if_icmpeq     199
+     182: aload         8
+     184: invokevirtual #635                // Method net/minecraft/item/ItemStack.getCount:()I
+     187: aload_0
+     188: getfield      #128                // Field quickCraftSlots:Ljava/util/Set;
+     191: invokeinterface #636,  1          // InterfaceMethod java/util/Set.size:()I
+     196: if_icmple     220
+     199: aload_0
+     200: aload         7
+     202: invokevirtual #640                // Method canInsertIntoSlot:(Lnet/minecraft/screen/slot/Slot;)Z
+     205: ifeq          220
+     208: aload_0
+     209: getfield      #128                // Field quickCraftSlots:Ljava/util/Set;
+     212: aload         7
+     214: invokeinterface #641,  2          // InterfaceMethod java/util/Set.add:(Ljava/lang/Object;)Z
+     219: pop
+     220: goto          539
+     223: aload_0
+     224: getfield      #604                // Field quickCraftStage:I
+     227: iconst_2
+     228: if_icmpne     535
+     231: aload_0
+     232: getfield      #128                // Field quickCraftSlots:Ljava/util/Set;
+     235: invokeinterface #642,  1          // InterfaceMethod java/util/Set.isEmpty:()Z
+     240: ifne          528
+     243: aload_0
+     244: getfield      #128                // Field quickCraftSlots:Ljava/util/Set;
+     247: invokeinterface #636,  1          // InterfaceMethod java/util/Set.size:()I
+     252: iconst_1
+     253: if_icmpne     298
+     256: aload_0
+     257: getfield      #128                // Field quickCraftSlots:Ljava/util/Set;
+     260: invokeinterface #643,  1          // InterfaceMethod java/util/Set.iterator:()Ljava/util/Iterator;
+     265: invokeinterface #386,  1          // InterfaceMethod java/util/Iterator.next:()Ljava/lang/Object;
+     270: checkcast     #143                // class net/minecraft/screen/slot/Slot
+     273: getfield      #257                // Field net/minecraft/screen/slot/Slot.id:I
+     276: istore        7
+     278: aload_0
+     279: invokevirtual #610                // Method endQuickCraft:()V
+     282: aload_0
+     283: iload         7
+     285: aload_0
+     286: getfield      #120                // Field quickCraftButton:I
+     289: getstatic     #646                // Field net/minecraft/screen/slot/SlotActionType.PICKUP:Lnet/minecraft/screen/slot/SlotActionType;
+     292: aload         4
+     294: invokevirtual #531                // Method internalOnSlotClick:(IILnet/minecraft/screen/slot/SlotActionType;Lnet/minecraft/entity/player/PlayerEntity;)V
+     297: return
+     298: aload_0
+     299: invokevirtual #346                // Method getCursorStack:()Lnet/minecraft/item/ItemStack;
+     302: invokevirtual #339                // Method net/minecraft/item/ItemStack.copy:()Lnet/minecraft/item/ItemStack;
+     305: astore        7
+     307: aload         7
+     309: invokevirtual #613                // Method net/minecraft/item/ItemStack.isEmpty:()Z
+     312: ifeq          320
+     315: aload_0
+     316: invokevirtual #610                // Method endQuickCraft:()V
+     319: return
+     320: aload_0
+     321: invokevirtual #346                // Method getCursorStack:()Lnet/minecraft/item/ItemStack;
+     324: invokevirtual #635                // Method net/minecraft/item/ItemStack.getCount:()I
+     327: istore        8
+     329: aload_0
+     330: getfield      #128                // Field quickCraftSlots:Ljava/util/Set;
+     333: invokeinterface #643,  1          // InterfaceMethod java/util/Set.iterator:()Ljava/util/Iterator;
+     338: astore        9
+     340: aload         9
+     342: invokeinterface #382,  1          // InterfaceMethod java/util/Iterator.hasNext:()Z
+     347: ifeq          515
+     350: aload         9
+     352: invokeinterface #386,  1          // InterfaceMethod java/util/Iterator.next:()Ljava/lang/Object;
+     357: checkcast     #143                // class net/minecraft/screen/slot/Slot
+     360: astore        10
+     362: aload_0
+     363: invokevirtual #346                // Method getCursorStack:()Lnet/minecraft/item/ItemStack;
+     366: astore        11
+     368: aload         10
+     370: ifnull        512
+     373: aload         10
+     375: aload         11
+     377: iconst_1
+     378: invokestatic  #629                // Method canInsertItemIntoSlot:(Lnet/minecraft/screen/slot/Slot;Lnet/minecraft/item/ItemStack;Z)Z
+     381: ifeq          512
+     384: aload         10
+     386: aload         11
+     388: invokevirtual #632                // Method net/minecraft/screen/slot/Slot.canInsert:(Lnet/minecraft/item/ItemStack;)Z
+     391: ifeq          512
+     394: aload_0
+     395: getfield      #120                // Field quickCraftButton:I
+     398: iconst_2
+     399: if_icmpeq     419
+     402: aload         11
+     404: invokevirtual #635                // Method net/minecraft/item/ItemStack.getCount:()I
+     407: aload_0
+     408: getfield      #128                // Field quickCraftSlots:Ljava/util/Set;
+     411: invokeinterface #636,  1          // InterfaceMethod java/util/Set.size:()I
+     416: if_icmplt     512
+     419: aload_0
+     420: aload         10
+     422: invokevirtual #640                // Method canInsertIntoSlot:(Lnet/minecraft/screen/slot/Slot;)Z
+     425: ifeq          512
+     428: aload         10
+     430: invokevirtual #649                // Method net/minecraft/screen/slot/Slot.hasStack:()Z
+     433: ifeq          447
+     436: aload         10
+     438: invokevirtual #336                // Method net/minecraft/screen/slot/Slot.getStack:()Lnet/minecraft/item/ItemStack;
+     441: invokevirtual #635                // Method net/minecraft/item/ItemStack.getCount:()I
+     444: goto          448
+     447: iconst_0
+     448: istore        12
+     450: aload         7
+     452: invokevirtual #652                // Method net/minecraft/item/ItemStack.getMaxCount:()I
+     455: aload         10
+     457: aload         7
+     459: invokevirtual #656                // Method net/minecraft/screen/slot/Slot.getMaxItemCount:(Lnet/minecraft/item/ItemStack;)I
+     462: invokestatic  #661                // Method java/lang/Math.min:(II)I
+     465: istore        13
+     467: aload_0
+     468: getfield      #128                // Field quickCraftSlots:Ljava/util/Set;
+     471: aload_0
+     472: getfield      #120                // Field quickCraftButton:I
+     475: aload         7
+     477: invokestatic  #665                // Method calculateStackSize:(Ljava/util/Set;ILnet/minecraft/item/ItemStack;)I
+     480: iload         12
+     482: iadd
+     483: iload         13
+     485: invokestatic  #661                // Method java/lang/Math.min:(II)I
+     488: istore        14
+     490: iload         8
+     492: iload         14
+     494: iload         12
+     496: isub
+     497: isub
+     498: istore        8
+     500: aload         10
+     502: aload         7
+     504: iload         14
+     506: invokevirtual #669                // Method net/minecraft/item/ItemStack.copyWithCount:(I)Lnet/minecraft/item/ItemStack;
+     509: invokevirtual #672                // Method net/minecraft/screen/slot/Slot.setStack:(Lnet/minecraft/item/ItemStack;)V
+     512: goto          340
+     515: aload         7
+     517: iload         8
+     519: invokevirtual #675                // Method net/minecraft/item/ItemStack.setCount:(I)V
+     522: aload_0
+     523: aload         7
+     525: invokevirtual #678                // Method setCursorStack:(Lnet/minecraft/item/ItemStack;)V
+     528: aload_0
+     529: invokevirtual #610                // Method endQuickCraft:()V
+     532: goto          539
+     535: aload_0
+     536: invokevirtual #610                // Method endQuickCraft:()V
+     539: goto          1875
+     542: aload_0
+     543: getfield      #604                // Field quickCraftStage:I
+     546: ifeq          556
+     549: aload_0
+     550: invokevirtual #610                // Method endQuickCraft:()V
+     553: goto          1875
+     556: aload_3
+     557: getstatic     #646                // Field net/minecraft/screen/slot/SlotActionType.PICKUP:Lnet/minecraft/screen/slot/SlotActionType;
+     560: if_acmpeq     570
+     563: aload_3
+     564: getstatic     #683                // Field net/minecraft/screen/slot/SlotActionType.QUICK_MOVE:Lnet/minecraft/screen/slot/SlotActionType;
+     567: if_acmpne     1073
+     570: iload_2
+     571: ifeq          579
+     574: iload_2
+     575: iconst_1
+     576: if_icmpne     1073
+     579: iload_2
+     580: ifne          589
+     583: getstatic     #689                // Field net/minecraft/util/ClickType.LEFT:Lnet/minecraft/util/ClickType;
+     586: goto          592
+     589: getstatic     #692                // Field net/minecraft/util/ClickType.RIGHT:Lnet/minecraft/util/ClickType;
+     592: astore        6
+     594: iload_1
+     595: sipush        -999
+     598: if_icmpne     658
+     601: aload_0
+     602: invokevirtual #346                // Method getCursorStack:()Lnet/minecraft/item/ItemStack;
+     605: invokevirtual #613                // Method net/minecraft/item/ItemStack.isEmpty:()Z
+     608: ifne          1070
+     611: aload         6
+     613: getstatic     #689                // Field net/minecraft/util/ClickType.LEFT:Lnet/minecraft/util/ClickType;
+     616: if_acmpne     640
+     619: aload         4
+     621: aload_0
+     622: invokevirtual #346                // Method getCursorStack:()Lnet/minecraft/item/ItemStack;
+     625: iconst_1
+     626: invokevirtual #696                // Method net/minecraft/entity/player/PlayerEntity.dropItem:(Lnet/minecraft/item/ItemStack;Z)Lnet/minecraft/entity/ItemEntity;
+     629: pop
+     630: aload_0
+     631: getstatic     #104                // Field net/minecraft/item/ItemStack.EMPTY:Lnet/minecraft/item/ItemStack;
+     634: invokevirtual #678                // Method setCursorStack:(Lnet/minecraft/item/ItemStack;)V
+     637: goto          1070
+     640: aload         4
+     642: aload_0
+     643: invokevirtual #346                // Method getCursorStack:()Lnet/minecraft/item/ItemStack;
+     646: iconst_1
+     647: invokevirtual #699                // Method net/minecraft/item/ItemStack.split:(I)Lnet/minecraft/item/ItemStack;
+     650: iconst_1
+     651: invokevirtual #696                // Method net/minecraft/entity/player/PlayerEntity.dropItem:(Lnet/minecraft/item/ItemStack;Z)Lnet/minecraft/entity/ItemEntity;
+     654: pop
+     655: goto          1070
+     658: aload_3
+     659: getstatic     #683                // Field net/minecraft/screen/slot/SlotActionType.QUICK_MOVE:Lnet/minecraft/screen/slot/SlotActionType;
+     662: if_acmpne     739
+     665: iload_1
+     666: ifge          670
+     669: return
+     670: aload_0
+     671: getfield      #91                 // Field slots:Lnet/minecraft/util/collection/DefaultedList;
+     674: iload_1
+     675: invokevirtual #332                // Method net/minecraft/util/collection/DefaultedList.get:(I)Ljava/lang/Object;
+     678: checkcast     #143                // class net/minecraft/screen/slot/Slot
+     681: astore        7
+     683: aload         7
+     685: aload         4
+     687: invokevirtual #703                // Method net/minecraft/screen/slot/Slot.canTakeItems:(Lnet/minecraft/entity/player/PlayerEntity;)Z
+     690: ifne          694
+     693: return
+     694: aload_0
+     695: aload         4
+     697: iload_1
+     698: invokevirtual #705                // Method quickMove:(Lnet/minecraft/entity/player/PlayerEntity;I)Lnet/minecraft/item/ItemStack;
+     701: astore        8
+     703: aload         8
+     705: invokevirtual #613                // Method net/minecraft/item/ItemStack.isEmpty:()Z
+     708: ifne          736
+     711: aload         7
+     713: invokevirtual #336                // Method net/minecraft/screen/slot/Slot.getStack:()Lnet/minecraft/item/ItemStack;
+     716: aload         8
+     718: invokestatic  #708                // Method net/minecraft/item/ItemStack.areItemsEqual:(Lnet/minecraft/item/ItemStack;Lnet/minecraft/item/ItemStack;)Z
+     721: ifeq          736
+     724: aload_0
+     725: aload         4
+     727: iload_1
+     728: invokevirtual #705                // Method quickMove:(Lnet/minecraft/entity/player/PlayerEntity;I)Lnet/minecraft/item/ItemStack;
+     731: astore        8
+     733: goto          703
+     736: goto          1070
+     739: iload_1
+     740: ifge          744
+     743: return
+     744: aload_0
+     745: getfield      #91                 // Field slots:Lnet/minecraft/util/collection/DefaultedList;
+     748: iload_1
+     749: invokevirtual #332                // Method net/minecraft/util/collection/DefaultedList.get:(I)Ljava/lang/Object;
+     752: checkcast     #143                // class net/minecraft/screen/slot/Slot
+     755: astore        7
+     757: aload         7
+     759: invokevirtual #336                // Method net/minecraft/screen/slot/Slot.getStack:()Lnet/minecraft/item/ItemStack;
+     762: astore        8
+     764: aload_0
+     765: invokevirtual #346                // Method getCursorStack:()Lnet/minecraft/item/ItemStack;
+     768: astore        9
+     770: aload         4
+     772: aload         9
+     774: aload         7
+     776: invokevirtual #336                // Method net/minecraft/screen/slot/Slot.getStack:()Lnet/minecraft/item/ItemStack;
+     779: aload         6
+     781: invokevirtual #712                // Method net/minecraft/entity/player/PlayerEntity.onPickupSlotClick:(Lnet/minecraft/item/ItemStack;Lnet/minecraft/item/ItemStack;Lnet/minecraft/util/ClickType;)V
+     784: aload_0
+     785: aload         4
+     787: aload         6
+     789: aload         7
+     791: aload         8
+     793: aload         9
+     795: invokevirtual #716                // Method handleSlotClick:(Lnet/minecraft/entity/player/PlayerEntity;Lnet/minecraft/util/ClickType;Lnet/minecraft/screen/slot/Slot;Lnet/minecraft/item/ItemStack;Lnet/minecraft/item/ItemStack;)Z
+     798: ifne          1065
+     801: aload         8
+     803: invokevirtual #613                // Method net/minecraft/item/ItemStack.isEmpty:()Z
+     806: ifeq          852
+     809: aload         9
+     811: invokevirtual #613                // Method net/minecraft/item/ItemStack.isEmpty:()Z
+     814: ifne          1065
+     817: aload         6
+     819: getstatic     #689                // Field net/minecraft/util/ClickType.LEFT:Lnet/minecraft/util/ClickType;
+     822: if_acmpne     833
+     825: aload         9
+     827: invokevirtual #635                // Method net/minecraft/item/ItemStack.getCount:()I
+     830: goto          834
+     833: iconst_1
+     834: istore        10
+     836: aload_0
+     837: aload         7
+     839: aload         9
+     841: iload         10
+     843: invokevirtual #720                // Method net/minecraft/screen/slot/Slot.insertStack:(Lnet/minecraft/item/ItemStack;I)Lnet/minecraft/item/ItemStack;
+     846: invokevirtual #678                // Method setCursorStack:(Lnet/minecraft/item/ItemStack;)V
+     849: goto          1065
+     852: aload         7
+     854: aload         4
+     856: invokevirtual #703                // Method net/minecraft/screen/slot/Slot.canTakeItems:(Lnet/minecraft/entity/player/PlayerEntity;)Z
+     859: ifeq          1065
+     862: aload         9
+     864: invokevirtual #613                // Method net/minecraft/item/ItemStack.isEmpty:()Z
+     867: ifeq          928
+     870: aload         6
+     872: getstatic     #689                // Field net/minecraft/util/ClickType.LEFT:Lnet/minecraft/util/ClickType;
+     875: if_acmpne     886
+     878: aload         8
+     880: invokevirtual #635                // Method net/minecraft/item/ItemStack.getCount:()I
+     883: goto          895
+     886: aload         8
+     888: invokevirtual #635                // Method net/minecraft/item/ItemStack.getCount:()I
+     891: iconst_1
+     892: iadd
+     893: iconst_2
+     894: idiv
+     895: istore        10
+     897: aload         7
+     899: iload         10
+     901: ldc           #38                 // int 2147483647
+     903: aload         4
+     905: invokevirtual #724                // Method net/minecraft/screen/slot/Slot.tryTakeStackRange:(IILnet/minecraft/entity/player/PlayerEntity;)Ljava/util/Optional;
+     908: astore        11
+     910: aload         11
+     912: aload_0
+     913: aload         7
+     915: aload         4
+     917: invokedynamic #736,  0            // InvokeDynamic #7:accept:(Lnet/minecraft/screen/ScreenHandler;Lnet/minecraft/screen/slot/Slot;Lnet/minecraft/entity/player/PlayerEntity;)Ljava/util/function/Consumer;
+     922: invokevirtual #742                // Method java/util/Optional.ifPresent:(Ljava/util/function/Consumer;)V
+     925: goto          1065
+     928: aload         7
+     930: aload         9
+     932: invokevirtual #632                // Method net/minecraft/screen/slot/Slot.canInsert:(Lnet/minecraft/item/ItemStack;)Z
+     935: ifeq          1014
+     938: aload         8
+     940: aload         9
+     942: invokestatic  #745                // Method net/minecraft/item/ItemStack.areItemsAndComponentsEqual:(Lnet/minecraft/item/ItemStack;Lnet/minecraft/item/ItemStack;)Z
+     945: ifeq          983
+     948: aload         6
+     950: getstatic     #689                // Field net/minecraft/util/ClickType.LEFT:Lnet/minecraft/util/ClickType;
+     953: if_acmpne     964
+     956: aload         9
+     958: invokevirtual #635                // Method net/minecraft/item/ItemStack.getCount:()I
+     961: goto          965
+     964: iconst_1
+     965: istore        10
+     967: aload_0
+     968: aload         7
+     970: aload         9
+     972: iload         10
+     974: invokevirtual #720                // Method net/minecraft/screen/slot/Slot.insertStack:(Lnet/minecraft/item/ItemStack;I)Lnet/minecraft/item/ItemStack;
+     977: invokevirtual #678                // Method setCursorStack:(Lnet/minecraft/item/ItemStack;)V
+     980: goto          1065
+     983: aload         9
+     985: invokevirtual #635                // Method net/minecraft/item/ItemStack.getCount:()I
+     988: aload         7
+     990: aload         9
+     992: invokevirtual #656                // Method net/minecraft/screen/slot/Slot.getMaxItemCount:(Lnet/minecraft/item/ItemStack;)I
+     995: if_icmpgt     1065
+     998: aload_0
+     999: aload         8
+    1001: invokevirtual #678                // Method setCursorStack:(Lnet/minecraft/item/ItemStack;)V
+    1004: aload         7
+    1006: aload         9
+    1008: invokevirtual #672                // Method net/minecraft/screen/slot/Slot.setStack:(Lnet/minecraft/item/ItemStack;)V
+    1011: goto          1065
+    1014: aload         8
+    1016: aload         9
+    1018: invokestatic  #745                // Method net/minecraft/item/ItemStack.areItemsAndComponentsEqual:(Lnet/minecraft/item/ItemStack;Lnet/minecraft/item/ItemStack;)Z
+    1021: ifeq          1065
+    1024: aload         7
+    1026: aload         8
+    1028: invokevirtual #635                // Method net/minecraft/item/ItemStack.getCount:()I
+    1031: aload         9
+    1033: invokevirtual #652                // Method net/minecraft/item/ItemStack.getMaxCount:()I
+    1036: aload         9
+    1038: invokevirtual #635                // Method net/minecraft/item/ItemStack.getCount:()I
+    1041: isub
+    1042: aload         4
+    1044: invokevirtual #724                // Method net/minecraft/screen/slot/Slot.tryTakeStackRange:(IILnet/minecraft/entity/player/PlayerEntity;)Ljava/util/Optional;
+    1047: astore        10
+    1049: aload         10
+    1051: aload         9
+    1053: aload         7
+    1055: aload         4
+    1057: invokedynamic #753,  0            // InvokeDynamic #8:accept:(Lnet/minecraft/item/ItemStack;Lnet/minecraft/screen/slot/Slot;Lnet/minecraft/entity/player/PlayerEntity;)Ljava/util/function/Consumer;
+    1062: invokevirtual #742                // Method java/util/Optional.ifPresent:(Ljava/util/function/Consumer;)V
+    1065: aload         7
+    1067: invokevirtual #756                // Method net/minecraft/screen/slot/Slot.markDirty:()V
+    1070: goto          1875
+    1073: aload_3
+    1074: getstatic     #759                // Field net/minecraft/screen/slot/SlotActionType.SWAP:Lnet/minecraft/screen/slot/SlotActionType;
+    1077: if_acmpne     1379
+    1080: iload_2
+    1081: iflt          1090
+    1084: iload_2
+    1085: bipush        9
+    1087: if_icmplt     1096
+    1090: iload_2
+    1091: bipush        40
+    1093: if_icmpne     1379
+    1096: aload         5
+    1098: iload_2
+    1099: invokevirtual #761                // Method net/minecraft/entity/player/PlayerInventory.getStack:(I)Lnet/minecraft/item/ItemStack;
+    1102: astore        6
+    1104: aload_0
+    1105: getfield      #91                 // Field slots:Lnet/minecraft/util/collection/DefaultedList;
+    1108: iload_1
+    1109: invokevirtual #332                // Method net/minecraft/util/collection/DefaultedList.get:(I)Ljava/lang/Object;
+    1112: checkcast     #143                // class net/minecraft/screen/slot/Slot
+    1115: astore        7
+    1117: aload         7
+    1119: invokevirtual #336                // Method net/minecraft/screen/slot/Slot.getStack:()Lnet/minecraft/item/ItemStack;
+    1122: astore        8
+    1124: aload         6
+    1126: invokevirtual #613                // Method net/minecraft/item/ItemStack.isEmpty:()Z
+    1129: ifeq          1143
+    1132: aload         8
+    1134: invokevirtual #613                // Method net/minecraft/item/ItemStack.isEmpty:()Z
+    1137: ifeq          1143
+    1140: goto          1376
+    1143: aload         6
+    1145: invokevirtual #613                // Method net/minecraft/item/ItemStack.isEmpty:()Z
+    1148: ifeq          1199
+    1151: aload         7
+    1153: aload         4
+    1155: invokevirtual #703                // Method net/minecraft/screen/slot/Slot.canTakeItems:(Lnet/minecraft/entity/player/PlayerEntity;)Z
+    1158: ifeq          1376
+    1161: aload         5
+    1163: iload_2
+    1164: aload         8
+    1166: invokevirtual #763                // Method net/minecraft/entity/player/PlayerInventory.setStack:(ILnet/minecraft/item/ItemStack;)V
+    1169: aload         7
+    1171: aload         8
+    1173: invokevirtual #635                // Method net/minecraft/item/ItemStack.getCount:()I
+    1176: invokevirtual #766                // Method net/minecraft/screen/slot/Slot.onTake:(I)V
+    1179: aload         7
+    1181: getstatic     #104                // Field net/minecraft/item/ItemStack.EMPTY:Lnet/minecraft/item/ItemStack;
+    1184: invokevirtual #672                // Method net/minecraft/screen/slot/Slot.setStack:(Lnet/minecraft/item/ItemStack;)V
+    1187: aload         7
+    1189: aload         4
+    1191: aload         8
+    1193: invokevirtual #770                // Method net/minecraft/screen/slot/Slot.onTakeItem:(Lnet/minecraft/entity/player/PlayerEntity;Lnet/minecraft/item/ItemStack;)V
+    1196: goto          1376
+    1199: aload         8
+    1201: invokevirtual #613                // Method net/minecraft/item/ItemStack.isEmpty:()Z
+    1204: ifeq          1270
+    1207: aload         7
+    1209: aload         6
+    1211: invokevirtual #632                // Method net/minecraft/screen/slot/Slot.canInsert:(Lnet/minecraft/item/ItemStack;)Z
+    1214: ifeq          1376
+    1217: aload         7
+    1219: aload         6
+    1221: invokevirtual #656                // Method net/minecraft/screen/slot/Slot.getMaxItemCount:(Lnet/minecraft/item/ItemStack;)I
+    1224: istore        9
+    1226: aload         6
+    1228: invokevirtual #635                // Method net/minecraft/item/ItemStack.getCount:()I
+    1231: iload         9
+    1233: if_icmple     1251
+    1236: aload         7
+    1238: aload         6
+    1240: iload         9
+    1242: invokevirtual #699                // Method net/minecraft/item/ItemStack.split:(I)Lnet/minecraft/item/ItemStack;
+    1245: invokevirtual #672                // Method net/minecraft/screen/slot/Slot.setStack:(Lnet/minecraft/item/ItemStack;)V
+    1248: goto          1267
+    1251: aload         5
+    1253: iload_2
+    1254: getstatic     #104                // Field net/minecraft/item/ItemStack.EMPTY:Lnet/minecraft/item/ItemStack;
+    1257: invokevirtual #763                // Method net/minecraft/entity/player/PlayerInventory.setStack:(ILnet/minecraft/item/ItemStack;)V
+    1260: aload         7
+    1262: aload         6
+    1264: invokevirtual #672                // Method net/minecraft/screen/slot/Slot.setStack:(Lnet/minecraft/item/ItemStack;)V
+    1267: goto          1376
+    1270: aload         7
+    1272: aload         4
+    1274: invokevirtual #703                // Method net/minecraft/screen/slot/Slot.canTakeItems:(Lnet/minecraft/entity/player/PlayerEntity;)Z
+    1277: ifeq          1376
+    1280: aload         7
+    1282: aload         6
+    1284: invokevirtual #632                // Method net/minecraft/screen/slot/Slot.canInsert:(Lnet/minecraft/item/ItemStack;)Z
+    1287: ifeq          1376
+    1290: aload         7
+    1292: aload         6
+    1294: invokevirtual #656                // Method net/minecraft/screen/slot/Slot.getMaxItemCount:(Lnet/minecraft/item/ItemStack;)I
+    1297: istore        9
+    1299: aload         6
+    1301: invokevirtual #635                // Method net/minecraft/item/ItemStack.getCount:()I
+    1304: iload         9
+    1306: if_icmple     1352
+    1309: aload         7
+    1311: aload         6
+    1313: iload         9
+    1315: invokevirtual #699                // Method net/minecraft/item/ItemStack.split:(I)Lnet/minecraft/item/ItemStack;
+    1318: invokevirtual #672                // Method net/minecraft/screen/slot/Slot.setStack:(Lnet/minecraft/item/ItemStack;)V
+    1321: aload         7
+    1323: aload         4
+    1325: aload         8
+    1327: invokevirtual #770                // Method net/minecraft/screen/slot/Slot.onTakeItem:(Lnet/minecraft/entity/player/PlayerEntity;Lnet/minecraft/item/ItemStack;)V
+    1330: aload         5
+    1332: aload         8
+    1334: invokevirtual #772                // Method net/minecraft/entity/player/PlayerInventory.insertStack:(Lnet/minecraft/item/ItemStack;)Z
+    1337: ifne          1376
+    1340: aload         4
+    1342: aload         8
+    1344: iconst_1
+    1345: invokevirtual #696                // Method net/minecraft/entity/player/PlayerEntity.dropItem:(Lnet/minecraft/item/ItemStack;Z)Lnet/minecraft/entity/ItemEntity;
+    1348: pop
+    1349: goto          1376
+    1352: aload         5
+    1354: iload_2
+    1355: aload         8
+    1357: invokevirtual #763                // Method net/minecraft/entity/player/PlayerInventory.setStack:(ILnet/minecraft/item/ItemStack;)V
+    1360: aload         7
+    1362: aload         6
+    1364: invokevirtual #672                // Method net/minecraft/screen/slot/Slot.setStack:(Lnet/minecraft/item/ItemStack;)V
+    1367: aload         7
+    1369: aload         4
+    1371: aload         8
+    1373: invokevirtual #770                // Method net/minecraft/screen/slot/Slot.onTakeItem:(Lnet/minecraft/entity/player/PlayerEntity;Lnet/minecraft/item/ItemStack;)V
+    1376: goto          1875
+    1379: aload_3
+    1380: getstatic     #775                // Field net/minecraft/screen/slot/SlotActionType.CLONE:Lnet/minecraft/screen/slot/SlotActionType;
+    1383: if_acmpne     1453
+    1386: aload         4
+    1388: invokevirtual #778                // Method net/minecraft/entity/player/PlayerEntity.isInCreativeMode:()Z
+    1391: ifeq          1453
+    1394: aload_0
+    1395: invokevirtual #346                // Method getCursorStack:()Lnet/minecraft/item/ItemStack;
+    1398: invokevirtual #613                // Method net/minecraft/item/ItemStack.isEmpty:()Z
+    1401: ifeq          1453
+    1404: iload_1
+    1405: iflt          1453
+    1408: aload_0
+    1409: getfield      #91                 // Field slots:Lnet/minecraft/util/collection/DefaultedList;
+    1412: iload_1
+    1413: invokevirtual #332                // Method net/minecraft/util/collection/DefaultedList.get:(I)Ljava/lang/Object;
+    1416: checkcast     #143                // class net/minecraft/screen/slot/Slot
+    1419: astore        6
+    1421: aload         6
+    1423: invokevirtual #649                // Method net/minecraft/screen/slot/Slot.hasStack:()Z
+    1426: ifeq          1450
+    1429: aload         6
+    1431: invokevirtual #336                // Method net/minecraft/screen/slot/Slot.getStack:()Lnet/minecraft/item/ItemStack;
+    1434: astore        7
+    1436: aload_0
+    1437: aload         7
+    1439: aload         7
+    1441: invokevirtual #652                // Method net/minecraft/item/ItemStack.getMaxCount:()I
+    1444: invokevirtual #669                // Method net/minecraft/item/ItemStack.copyWithCount:(I)Lnet/minecraft/item/ItemStack;
+    1447: invokevirtual #678                // Method setCursorStack:(Lnet/minecraft/item/ItemStack;)V
+    1450: goto          1875
+    1453: aload_3
+    1454: getstatic     #781                // Field net/minecraft/screen/slot/SlotActionType.THROW:Lnet/minecraft/screen/slot/SlotActionType;
+    1457: if_acmpne     1613
+    1460: aload_0
+    1461: invokevirtual #346                // Method getCursorStack:()Lnet/minecraft/item/ItemStack;
+    1464: invokevirtual #613                // Method net/minecraft/item/ItemStack.isEmpty:()Z
+    1467: ifeq          1613
+    1470: iload_1
+    1471: iflt          1613
+    1474: aload_0
+    1475: getfield      #91                 // Field slots:Lnet/minecraft/util/collection/DefaultedList;
+    1478: iload_1
+    1479: invokevirtual #332                // Method net/minecraft/util/collection/DefaultedList.get:(I)Ljava/lang/Object;
+    1482: checkcast     #143                // class net/minecraft/screen/slot/Slot
+    1485: astore        6
+    1487: iload_2
+    1488: ifne          1495
+    1491: iconst_1
+    1492: goto          1503
+    1495: aload         6
+    1497: invokevirtual #336                // Method net/minecraft/screen/slot/Slot.getStack:()Lnet/minecraft/item/ItemStack;
+    1500: invokevirtual #635                // Method net/minecraft/item/ItemStack.getCount:()I
+    1503: istore        7
+    1505: aload         4
+    1507: invokevirtual #784                // Method net/minecraft/entity/player/PlayerEntity.canDropItems:()Z
+    1510: ifne          1514
+    1513: return
+    1514: aload         6
+    1516: iload         7
+    1518: ldc           #38                 // int 2147483647
+    1520: aload         4
+    1522: invokevirtual #788                // Method net/minecraft/screen/slot/Slot.takeStackRange:(IILnet/minecraft/entity/player/PlayerEntity;)Lnet/minecraft/item/ItemStack;
+    1525: astore        8
+    1527: aload         4
+    1529: aload         8
+    1531: iconst_1
+    1532: invokevirtual #696                // Method net/minecraft/entity/player/PlayerEntity.dropItem:(Lnet/minecraft/item/ItemStack;Z)Lnet/minecraft/entity/ItemEntity;
+    1535: pop
+    1536: aload         4
+    1538: aload         8
+    1540: invokevirtual #791                // Method net/minecraft/entity/player/PlayerEntity.dropCreativeStack:(Lnet/minecraft/item/ItemStack;)V
+    1543: iload_2
+    1544: iconst_1
+    1545: if_icmpne     1610
+    1548: aload         8
+    1550: invokevirtual #613                // Method net/minecraft/item/ItemStack.isEmpty:()Z
+    1553: ifne          1610
+    1556: aload         6
+    1558: invokevirtual #336                // Method net/minecraft/screen/slot/Slot.getStack:()Lnet/minecraft/item/ItemStack;
+    1561: aload         8
+    1563: invokestatic  #708                // Method net/minecraft/item/ItemStack.areItemsEqual:(Lnet/minecraft/item/ItemStack;Lnet/minecraft/item/ItemStack;)Z
+    1566: ifeq          1610
+    1569: aload         4
+    1571: invokevirtual #784                // Method net/minecraft/entity/player/PlayerEntity.canDropItems:()Z
+    1574: ifne          1578
+    1577: return
+    1578: aload         6
+    1580: iload         7
+    1582: ldc           #38                 // int 2147483647
+    1584: aload         4
+    1586: invokevirtual #788                // Method net/minecraft/screen/slot/Slot.takeStackRange:(IILnet/minecraft/entity/player/PlayerEntity;)Lnet/minecraft/item/ItemStack;
+    1589: astore        8
+    1591: aload         4
+    1593: aload         8
+    1595: iconst_1
+    1596: invokevirtual #696                // Method net/minecraft/entity/player/PlayerEntity.dropItem:(Lnet/minecraft/item/ItemStack;Z)Lnet/minecraft/entity/ItemEntity;
+    1599: pop
+    1600: aload         4
+    1602: aload         8
+    1604: invokevirtual #791                // Method net/minecraft/entity/player/PlayerEntity.dropCreativeStack:(Lnet/minecraft/item/ItemStack;)V
+    1607: goto          1548
+    1610: goto          1875
+    1613: aload_3
+    1614: getstatic     #794                // Field net/minecraft/screen/slot/SlotActionType.PICKUP_ALL:Lnet/minecraft/screen/slot/SlotActionType;
+    1617: if_acmpne     1875
+    1620: iload_1
+    1621: iflt          1875
+    1624: aload_0
+    1625: getfield      #91                 // Field slots:Lnet/minecraft/util/collection/DefaultedList;
+    1628: iload_1
+    1629: invokevirtual #332                // Method net/minecraft/util/collection/DefaultedList.get:(I)Ljava/lang/Object;
+    1632: checkcast     #143                // class net/minecraft/screen/slot/Slot
+    1635: astore        6
+    1637: aload_0
+    1638: invokevirtual #346                // Method getCursorStack:()Lnet/minecraft/item/ItemStack;
+    1641: astore        7
+    1643: aload         7
+    1645: invokevirtual #613                // Method net/minecraft/item/ItemStack.isEmpty:()Z
+    1648: ifne          1875
+    1651: aload         6
+    1653: invokevirtual #649                // Method net/minecraft/screen/slot/Slot.hasStack:()Z
+    1656: ifeq          1669
+    1659: aload         6
+    1661: aload         4
+    1663: invokevirtual #703                // Method net/minecraft/screen/slot/Slot.canTakeItems:(Lnet/minecraft/entity/player/PlayerEntity;)Z
+    1666: ifne          1875
+    1669: iload_2
+    1670: ifne          1677
+    1673: iconst_0
+    1674: goto          1686
+    1677: aload_0
+    1678: getfield      #91                 // Field slots:Lnet/minecraft/util/collection/DefaultedList;
+    1681: invokevirtual #254                // Method net/minecraft/util/collection/DefaultedList.size:()I
+    1684: iconst_1
+    1685: isub
+    1686: istore        8
+    1688: iload_2
+    1689: ifne          1696
+    1692: iconst_1
+    1693: goto          1697
+    1696: iconst_m1
+    1697: istore        9
+    1699: iconst_0
+    1700: istore        10
+    1702: iload         10
+    1704: iconst_2
+    1705: if_icmpge     1875
+    1708: iload         8
+    1710: istore        11
+    1712: iload         11
+    1714: iflt          1869
+    1717: iload         11
+    1719: aload_0
+    1720: getfield      #91                 // Field slots:Lnet/minecraft/util/collection/DefaultedList;
+    1723: invokevirtual #254                // Method net/minecraft/util/collection/DefaultedList.size:()I
+    1726: if_icmpge     1869
+    1729: aload         7
+    1731: invokevirtual #635                // Method net/minecraft/item/ItemStack.getCount:()I
+    1734: aload         7
+    1736: invokevirtual #652                // Method net/minecraft/item/ItemStack.getMaxCount:()I
+    1739: if_icmpge     1869
+    1742: aload_0
+    1743: getfield      #91                 // Field slots:Lnet/minecraft/util/collection/DefaultedList;
+    1746: iload         11
+    1748: invokevirtual #332                // Method net/minecraft/util/collection/DefaultedList.get:(I)Ljava/lang/Object;
+    1751: checkcast     #143                // class net/minecraft/screen/slot/Slot
+    1754: astore        12
+    1756: aload         12
+    1758: invokevirtual #649                // Method net/minecraft/screen/slot/Slot.hasStack:()Z
+    1761: ifeq          1859
+    1764: aload         12
+    1766: aload         7
+    1768: iconst_1
+    1769: invokestatic  #629                // Method canInsertItemIntoSlot:(Lnet/minecraft/screen/slot/Slot;Lnet/minecraft/item/ItemStack;Z)Z
+    1772: ifeq          1859
+    1775: aload         12
+    1777: aload         4
+    1779: invokevirtual #703                // Method net/minecraft/screen/slot/Slot.canTakeItems:(Lnet/minecraft/entity/player/PlayerEntity;)Z
+    1782: ifeq          1859
+    1785: aload_0
+    1786: aload         7
+    1788: aload         12
+    1790: invokevirtual #797                // Method canInsertIntoSlot:(Lnet/minecraft/item/ItemStack;Lnet/minecraft/screen/slot/Slot;)Z
+    1793: ifeq          1859
+    1796: aload         12
+    1798: invokevirtual #336                // Method net/minecraft/screen/slot/Slot.getStack:()Lnet/minecraft/item/ItemStack;
+    1801: astore        13
+    1803: iload         10
+    1805: ifne          1824
+    1808: aload         13
+    1810: invokevirtual #635                // Method net/minecraft/item/ItemStack.getCount:()I
+    1813: aload         13
+    1815: invokevirtual #652                // Method net/minecraft/item/ItemStack.getMaxCount:()I
+    1818: if_icmpne     1824
+    1821: goto          1859
+    1824: aload         12
+    1826: aload         13
+    1828: invokevirtual #635                // Method net/minecraft/item/ItemStack.getCount:()I
+    1831: aload         7
+    1833: invokevirtual #652                // Method net/minecraft/item/ItemStack.getMaxCount:()I
+    1836: aload         7
+    1838: invokevirtual #635                // Method net/minecraft/item/ItemStack.getCount:()I
+    1841: isub
+    1842: aload         4
+    1844: invokevirtual #788                // Method net/minecraft/screen/slot/Slot.takeStackRange:(IILnet/minecraft/entity/player/PlayerEntity;)Lnet/minecraft/item/ItemStack;
+    1847: astore        14
+    1849: aload         7
+    1851: aload         14
+    1853: invokevirtual #635                // Method net/minecraft/item/ItemStack.getCount:()I
+    1856: invokevirtual #800                // Method net/minecraft/item/ItemStack.increment:(I)V
+    1859: iload         11
+    1861: iload         9
+    1863: iadd
+    1864: istore        11
+    1866: goto          1712
+    1869: iinc          10, 1
+    1872: goto          1702
+    1875: return
+
+  private boolean handleSlotClick(net.minecraft.entity.player.PlayerEntity, net.minecraft.util.ClickType, net.minecraft.screen.slot.Slot, net.minecraft.item.ItemStack, net.minecraft.item.ItemStack);
+    Code:
+       0: aload_1
+       1: invokevirtual #824                // Method net/minecraft/entity/player/PlayerEntity.getWorld:()Lnet/minecraft/world/World;
+       4: invokevirtual #830                // Method net/minecraft/world/World.getEnabledFeatures:()Lnet/minecraft/resource/featuretoggle/FeatureSet;
+       7: astore        6
+       9: aload         5
+      11: aload         6
+      13: invokevirtual #834                // Method net/minecraft/item/ItemStack.isItemEnabled:(Lnet/minecraft/resource/featuretoggle/FeatureSet;)Z
+      16: ifeq          32
+      19: aload         5
+      21: aload_3
+      22: aload_2
+      23: aload_1
+      24: invokevirtual #838                // Method net/minecraft/item/ItemStack.onStackClicked:(Lnet/minecraft/screen/slot/Slot;Lnet/minecraft/util/ClickType;Lnet/minecraft/entity/player/PlayerEntity;)Z
+      27: ifeq          32
+      30: iconst_1
+      31: ireturn
+      32: aload         4
+      34: aload         6
+      36: invokevirtual #834                // Method net/minecraft/item/ItemStack.isItemEnabled:(Lnet/minecraft/resource/featuretoggle/FeatureSet;)Z
+      39: ifeq          63
+      42: aload         4
+      44: aload         5
+      46: aload_3
+      47: aload_2
+      48: aload_1
+      49: aload_0
+      50: invokevirtual #844                // Method getCursorStackReference:()Lnet/minecraft/inventory/StackReference;
+      53: invokevirtual #848                // Method net/minecraft/item/ItemStack.onClicked:(Lnet/minecraft/item/ItemStack;Lnet/minecraft/screen/slot/Slot;Lnet/minecraft/util/ClickType;Lnet/minecraft/entity/player/PlayerEntity;Lnet/minecraft/inventory/StackReference;)Z
+      56: ifeq          63
+      59: iconst_1
+      60: goto          64
+      63: iconst_0
+      64: ireturn
+
+  private net.minecraft.inventory.StackReference getCursorStackReference();
+    Code:
+       0: new           #7                  // class net/minecraft/screen/ScreenHandler$1
+       3: dup
+       4: aload_0
+       5: invokespecial #853                // Method net/minecraft/screen/ScreenHandler$1."<init>":(Lnet/minecraft/screen/ScreenHandler;)V
+       8: areturn
+
+  public boolean canInsertIntoSlot(net.minecraft.item.ItemStack, net.minecraft.screen.slot.Slot);
+    Code:
+       0: iconst_1
+       1: ireturn
+
+  public void onClosed(net.minecraft.entity.player.PlayerEntity);
+    Code:
+       0: aload_1
+       1: instanceof    #857                // class net/minecraft/server/network/ServerPlayerEntity
+       4: ifne          8
+       7: return
+       8: aload_0
+       9: invokevirtual #346                // Method getCursorStack:()Lnet/minecraft/item/ItemStack;
+      12: astore_2
+      13: aload_2
+      14: invokevirtual #613                // Method net/minecraft/item/ItemStack.isEmpty:()Z
+      17: ifne          32
+      20: aload_1
+      21: aload_2
+      22: invokestatic  #860                // Method offerOrDropStack:(Lnet/minecraft/entity/player/PlayerEntity;Lnet/minecraft/item/ItemStack;)V
+      25: aload_0
+      26: getstatic     #104                // Field net/minecraft/item/ItemStack.EMPTY:Lnet/minecraft/item/ItemStack;
+      29: invokevirtual #678                // Method setCursorStack:(Lnet/minecraft/item/ItemStack;)V
+      32: return
+
+  private static void offerOrDropStack(net.minecraft.entity.player.PlayerEntity, net.minecraft.item.ItemStack);
+    Code:
+       0: aload_0
+       1: invokevirtual #863                // Method net/minecraft/entity/player/PlayerEntity.isRemoved:()Z
+       4: ifeq          21
+       7: aload_0
+       8: invokevirtual #867                // Method net/minecraft/entity/player/PlayerEntity.getRemovalReason:()Lnet/minecraft/entity/Entity$RemovalReason;
+      11: getstatic     #871                // Field net/minecraft/entity/Entity$RemovalReason.CHANGED_DIMENSION:Lnet/minecraft/entity/Entity$RemovalReason;
+      14: if_acmpeq     21
+      17: iconst_1
+      18: goto          22
+      21: iconst_0
+      22: istore_2
+      23: aload_0
+      24: instanceof    #857                // class net/minecraft/server/network/ServerPlayerEntity
+      27: ifeq          48
+      30: aload_0
+      31: checkcast     #857                // class net/minecraft/server/network/ServerPlayerEntity
+      34: astore        4
+      36: aload         4
+      38: invokevirtual #874                // Method net/minecraft/server/network/ServerPlayerEntity.isDisconnected:()Z
+      41: ifeq          48
+      44: iconst_1
+      45: goto          49
+      48: iconst_0
+      49: istore_3
+      50: iload_2
+      51: ifne          58
+      54: iload_3
+      55: ifeq          68
+      58: aload_0
+      59: aload_1
+      60: iconst_0
+      61: invokevirtual #696                // Method net/minecraft/entity/player/PlayerEntity.dropItem:(Lnet/minecraft/item/ItemStack;Z)Lnet/minecraft/entity/ItemEntity;
+      64: pop
+      65: goto          83
+      68: aload_0
+      69: instanceof    #857                // class net/minecraft/server/network/ServerPlayerEntity
+      72: ifeq          83
+      75: aload_0
+      76: invokevirtual #599                // Method net/minecraft/entity/player/PlayerEntity.getInventory:()Lnet/minecraft/entity/player/PlayerInventory;
+      79: aload_1
+      80: invokevirtual #877                // Method net/minecraft/entity/player/PlayerInventory.offerOrDrop:(Lnet/minecraft/item/ItemStack;)V
+      83: return
+
+  protected void dropInventory(net.minecraft.entity.player.PlayerEntity, net.minecraft.inventory.Inventory);
+    Code:
+       0: iconst_0
+       1: istore_3
+       2: iload_3
+       3: aload_2
+       4: invokeinterface #224,  1          // InterfaceMethod net/minecraft/inventory/Inventory.size:()I
+       9: if_icmpge     29
+      12: aload_1
+      13: aload_2
+      14: iload_3
+      15: invokeinterface #886,  2          // InterfaceMethod net/minecraft/inventory/Inventory.removeStack:(I)Lnet/minecraft/item/ItemStack;
+      20: invokestatic  #860                // Method offerOrDropStack:(Lnet/minecraft/entity/player/PlayerEntity;Lnet/minecraft/item/ItemStack;)V
+      23: iinc          3, 1
+      26: goto          2
+      29: return
+
+  public void onContentChanged(net.minecraft.inventory.Inventory);
+    Code:
+       0: aload_0
+       1: invokevirtual #301                // Method sendContentUpdates:()V
+       4: return
+
+  public void setStackInSlot(int, int, net.minecraft.item.ItemStack);
+    Code:
+       0: aload_0
+       1: iload_1
+       2: invokevirtual #892                // Method getSlot:(I)Lnet/minecraft/screen/slot/Slot;
+       5: aload_3
+       6: invokevirtual #895                // Method net/minecraft/screen/slot/Slot.setStackNoCallbacks:(Lnet/minecraft/item/ItemStack;)V
+       9: aload_0
+      10: iload_2
+      11: putfield      #897                // Field revision:I
+      14: return
+
+  public void updateSlotStacks(int, java.util.List<net.minecraft.item.ItemStack>, net.minecraft.item.ItemStack);
+    Code:
+       0: iconst_0
+       1: istore        4
+       3: iload         4
+       5: aload_2
+       6: invokeinterface #347,  1          // InterfaceMethod java/util/List.size:()I
+      11: if_icmpge     40
+      14: aload_0
+      15: iload         4
+      17: invokevirtual #892                // Method getSlot:(I)Lnet/minecraft/screen/slot/Slot;
+      20: aload_2
+      21: iload         4
+      23: invokeinterface #348,  2          // InterfaceMethod java/util/List.get:(I)Ljava/lang/Object;
+      28: checkcast     #101                // class net/minecraft/item/ItemStack
+      31: invokevirtual #895                // Method net/minecraft/screen/slot/Slot.setStackNoCallbacks:(Lnet/minecraft/item/ItemStack;)V
+      34: iinc          4, 1
+      37: goto          3
+      40: aload_0
+      41: aload_3
+      42: putfield      #106                // Field cursorStack:Lnet/minecraft/item/ItemStack;
+      45: aload_0
+      46: iload_1
+      47: putfield      #897                // Field revision:I
+      50: return
+
+  public void setProperty(int, int);
+    Code:
+       0: aload_0
+       1: getfield      #99                 // Field properties:Ljava/util/List;
+       4: iload_1
+       5: invokeinterface #348,  2          // InterfaceMethod java/util/List.get:(I)Ljava/lang/Object;
+      10: checkcast     #286                // class net/minecraft/screen/Property
+      13: iload_2
+      14: invokevirtual #904                // Method net/minecraft/screen/Property.set:(I)V
+      17: return
+
+  public abstract boolean canUse(net.minecraft.entity.player.PlayerEntity);
+
+  protected boolean insertItem(net.minecraft.item.ItemStack, int, int, boolean);
+    Code:
+       0: iconst_0
+       1: istore        5
+       3: iload_2
+       4: istore        6
+       6: iload         4
+       8: ifeq          16
+      11: iload_3
+      12: iconst_1
+      13: isub
+      14: istore        6
+      16: aload_1
+      17: invokevirtual #912                // Method net/minecraft/item/ItemStack.isStackable:()Z
+      20: ifeq          193
+      23: aload_1
+      24: invokevirtual #613                // Method net/minecraft/item/ItemStack.isEmpty:()Z
+      27: ifne          193
+      30: iload         4
+      32: ifeq          44
+      35: iload         6
+      37: iload_2
+      38: if_icmplt     193
+      41: goto          50
+      44: iload         6
+      46: iload_3
+      47: if_icmpge     193
+      50: aload_0
+      51: getfield      #91                 // Field slots:Lnet/minecraft/util/collection/DefaultedList;
+      54: iload         6
+      56: invokevirtual #332                // Method net/minecraft/util/collection/DefaultedList.get:(I)Ljava/lang/Object;
+      59: checkcast     #143                // class net/minecraft/screen/slot/Slot
+      62: astore        7
+      64: aload         7
+      66: invokevirtual #336                // Method net/minecraft/screen/slot/Slot.getStack:()Lnet/minecraft/item/ItemStack;
+      69: astore        8
+      71: aload         8
+      73: invokevirtual #613                // Method net/minecraft/item/ItemStack.isEmpty:()Z
+      76: ifne          176
+      79: aload_1
+      80: aload         8
+      82: invokestatic  #745                // Method net/minecraft/item/ItemStack.areItemsAndComponentsEqual:(Lnet/minecraft/item/ItemStack;Lnet/minecraft/item/ItemStack;)Z
+      85: ifeq          176
+      88: aload         8
+      90: invokevirtual #635                // Method net/minecraft/item/ItemStack.getCount:()I
+      93: aload_1
+      94: invokevirtual #635                // Method net/minecraft/item/ItemStack.getCount:()I
+      97: iadd
+      98: istore        9
+     100: aload         7
+     102: aload         8
+     104: invokevirtual #656                // Method net/minecraft/screen/slot/Slot.getMaxItemCount:(Lnet/minecraft/item/ItemStack;)I
+     107: istore        10
+     109: iload         9
+     111: iload         10
+     113: if_icmpgt     139
+     116: aload_1
+     117: iconst_0
+     118: invokevirtual #675                // Method net/minecraft/item/ItemStack.setCount:(I)V
+     121: aload         8
+     123: iload         9
+     125: invokevirtual #675                // Method net/minecraft/item/ItemStack.setCount:(I)V
+     128: aload         7
+     130: invokevirtual #756                // Method net/minecraft/screen/slot/Slot.markDirty:()V
+     133: iconst_1
+     134: istore        5
+     136: goto          176
+     139: aload         8
+     141: invokevirtual #635                // Method net/minecraft/item/ItemStack.getCount:()I
+     144: iload         10
+     146: if_icmpge     176
+     149: aload_1
+     150: iload         10
+     152: aload         8
+     154: invokevirtual #635                // Method net/minecraft/item/ItemStack.getCount:()I
+     157: isub
+     158: invokevirtual #915                // Method net/minecraft/item/ItemStack.decrement:(I)V
+     161: aload         8
+     163: iload         10
+     165: invokevirtual #675                // Method net/minecraft/item/ItemStack.setCount:(I)V
+     168: aload         7
+     170: invokevirtual #756                // Method net/minecraft/screen/slot/Slot.markDirty:()V
+     173: iconst_1
+     174: istore        5
+     176: iload         4
+     178: ifeq          187
+     181: iinc          6, -1
+     184: goto          190
+     187: iinc          6, 1
+     190: goto          23
+     193: aload_1
+     194: invokevirtual #613                // Method net/minecraft/item/ItemStack.isEmpty:()Z
+     197: ifne          328
+     200: iload         4
+     202: ifeq          213
+     205: iload_3
+     206: iconst_1
+     207: isub
+     208: istore        6
+     210: goto          216
+     213: iload_2
+     214: istore        6
+     216: iload         4
+     218: ifeq          230
+     221: iload         6
+     223: iload_2
+     224: if_icmplt     328
+     227: goto          236
+     230: iload         6
+     232: iload_3
+     233: if_icmpge     328
+     236: aload_0
+     237: getfield      #91                 // Field slots:Lnet/minecraft/util/collection/DefaultedList;
+     240: iload         6
+     242: invokevirtual #332                // Method net/minecraft/util/collection/DefaultedList.get:(I)Ljava/lang/Object;
+     245: checkcast     #143                // class net/minecraft/screen/slot/Slot
+     248: astore        7
+     250: aload         7
+     252: invokevirtual #336                // Method net/minecraft/screen/slot/Slot.getStack:()Lnet/minecraft/item/ItemStack;
+     255: astore        8
+     257: aload         8
+     259: invokevirtual #613                // Method net/minecraft/item/ItemStack.isEmpty:()Z
+     262: ifeq          311
+     265: aload         7
+     267: aload_1
+     268: invokevirtual #632                // Method net/minecraft/screen/slot/Slot.canInsert:(Lnet/minecraft/item/ItemStack;)Z
+     271: ifeq          311
+     274: aload         7
+     276: aload_1
+     277: invokevirtual #656                // Method net/minecraft/screen/slot/Slot.getMaxItemCount:(Lnet/minecraft/item/ItemStack;)I
+     280: istore        9
+     282: aload         7
+     284: aload_1
+     285: aload_1
+     286: invokevirtual #635                // Method net/minecraft/item/ItemStack.getCount:()I
+     289: iload         9
+     291: invokestatic  #661                // Method java/lang/Math.min:(II)I
+     294: invokevirtual #699                // Method net/minecraft/item/ItemStack.split:(I)Lnet/minecraft/item/ItemStack;
+     297: invokevirtual #672                // Method net/minecraft/screen/slot/Slot.setStack:(Lnet/minecraft/item/ItemStack;)V
+     300: aload         7
+     302: invokevirtual #756                // Method net/minecraft/screen/slot/Slot.markDirty:()V
+     305: iconst_1
+     306: istore        5
+     308: goto          328
+     311: iload         4
+     313: ifeq          322
+     316: iinc          6, -1
+     319: goto          325
+     322: iinc          6, 1
+     325: goto          216
+     328: iload         5
+     330: ireturn
+
+  public static int unpackQuickCraftButton(int);
+    Code:
+       0: iload_0
+       1: iconst_2
+       2: ishr
+       3: iconst_3
+       4: iand
+       5: ireturn
+
+  public static int unpackQuickCraftStage(int);
+    Code:
+       0: iload_0
+       1: iconst_3
+       2: iand
+       3: ireturn
+
+  public static int packQuickCraftData(int, int);
+    Code:
+       0: iload_0
+       1: iconst_3
+       2: iand
+       3: iload_1
+       4: iconst_3
+       5: iand
+       6: iconst_2
+       7: ishl
+       8: ior
+       9: ireturn
+
+  public static boolean shouldQuickCraftContinue(int, net.minecraft.entity.player.PlayerEntity);
+    Code:
+       0: iload_0
+       1: ifne          6
+       4: iconst_1
+       5: ireturn
+       6: iload_0
+       7: iconst_1
+       8: if_icmpne     13
+      11: iconst_1
+      12: ireturn
+      13: iload_0
+      14: iconst_2
+      15: if_icmpne     27
+      18: aload_1
+      19: invokevirtual #778                // Method net/minecraft/entity/player/PlayerEntity.isInCreativeMode:()Z
+      22: ifeq          27
+      25: iconst_1
+      26: ireturn
+      27: iconst_0
+      28: ireturn
+
+  protected void endQuickCraft();
+    Code:
+       0: aload_0
+       1: iconst_0
+       2: putfield      #604                // Field quickCraftStage:I
+       5: aload_0
+       6: getfield      #128                // Field quickCraftSlots:Ljava/util/Set;
+       9: invokeinterface #625,  1          // InterfaceMethod java/util/Set.clear:()V
+      14: return
+
+  public static boolean canInsertItemIntoSlot(net.minecraft.screen.slot.Slot, net.minecraft.item.ItemStack, boolean);
+    Code:
+       0: aload_0
+       1: ifnull        11
+       4: aload_0
+       5: invokevirtual #649                // Method net/minecraft/screen/slot/Slot.hasStack:()Z
+       8: ifne          15
+      11: iconst_1
+      12: goto          16
+      15: iconst_0
+      16: istore_3
+      17: iload_3
+      18: ifne          65
+      21: aload_1
+      22: aload_0
+      23: invokevirtual #336                // Method net/minecraft/screen/slot/Slot.getStack:()Lnet/minecraft/item/ItemStack;
+      26: invokestatic  #745                // Method net/minecraft/item/ItemStack.areItemsAndComponentsEqual:(Lnet/minecraft/item/ItemStack;Lnet/minecraft/item/ItemStack;)Z
+      29: ifeq          65
+      32: aload_0
+      33: invokevirtual #336                // Method net/minecraft/screen/slot/Slot.getStack:()Lnet/minecraft/item/ItemStack;
+      36: invokevirtual #635                // Method net/minecraft/item/ItemStack.getCount:()I
+      39: iload_2
+      40: ifeq          47
+      43: iconst_0
+      44: goto          51
+      47: aload_1
+      48: invokevirtual #635                // Method net/minecraft/item/ItemStack.getCount:()I
+      51: iadd
+      52: aload_1
+      53: invokevirtual #652                // Method net/minecraft/item/ItemStack.getMaxCount:()I
+      56: if_icmpgt     63
+      59: iconst_1
+      60: goto          64
+      63: iconst_0
+      64: ireturn
+      65: iload_3
+      66: ireturn
+
+  public static int calculateStackSize(java.util.Set<net.minecraft.screen.slot.Slot>, int, net.minecraft.item.ItemStack);
+    Code:
+       0: iload_1
+       1: tableswitch   { // 0 to 2
+                     0: 28
+                     1: 47
+                     2: 51
+               default: 58
+          }
+      28: aload_2
+      29: invokevirtual #635                // Method net/minecraft/item/ItemStack.getCount:()I
+      32: i2f
+      33: aload_0
+      34: invokeinterface #636,  1          // InterfaceMethod java/util/Set.size:()I
+      39: i2f
+      40: fdiv
+      41: invokestatic  #928                // Method net/minecraft/util/math/MathHelper.floor:(F)I
+      44: goto          62
+      47: iconst_1
+      48: goto          62
+      51: aload_2
+      52: invokevirtual #652                // Method net/minecraft/item/ItemStack.getMaxCount:()I
+      55: goto          62
+      58: aload_2
+      59: invokevirtual #635                // Method net/minecraft/item/ItemStack.getCount:()I
+      62: ireturn
+
+  public boolean canInsertIntoSlot(net.minecraft.screen.slot.Slot);
+    Code:
+       0: iconst_1
+       1: ireturn
+
+  public static int calculateComparatorOutput(net.minecraft.block.entity.BlockEntity);
+    Code:
+       0: aload_0
+       1: instanceof    #220                // class net/minecraft/inventory/Inventory
+       4: ifeq          15
+       7: aload_0
+       8: checkcast     #220                // class net/minecraft/inventory/Inventory
+      11: invokestatic  #934                // Method calculateComparatorOutput:(Lnet/minecraft/inventory/Inventory;)I
+      14: ireturn
+      15: iconst_0
+      16: ireturn
+
+  public static int calculateComparatorOutput(net.minecraft.inventory.Inventory);
+    Code:
+       0: aload_0
+       1: ifnonnull     6
+       4: iconst_0
+       5: ireturn
+       6: fconst_0
+       7: fstore_1
+       8: iconst_0
+       9: istore_2
+      10: iload_2
+      11: aload_0
+      12: invokeinterface #224,  1          // InterfaceMethod net/minecraft/inventory/Inventory.size:()I
+      17: if_icmpge     58
+      20: aload_0
+      21: iload_2
+      22: invokeinterface #936,  2          // InterfaceMethod net/minecraft/inventory/Inventory.getStack:(I)Lnet/minecraft/item/ItemStack;
+      27: astore_3
+      28: aload_3
+      29: invokevirtual #613                // Method net/minecraft/item/ItemStack.isEmpty:()Z
+      32: ifne          52
+      35: fload_1
+      36: aload_3
+      37: invokevirtual #635                // Method net/minecraft/item/ItemStack.getCount:()I
+      40: i2f
+      41: aload_0
+      42: aload_3
+      43: invokeinterface #938,  2          // InterfaceMethod net/minecraft/inventory/Inventory.getMaxCount:(Lnet/minecraft/item/ItemStack;)I
+      48: i2f
+      49: fdiv
+      50: fadd
+      51: fstore_1
+      52: iinc          2, 1
+      55: goto          10
+      58: fload_1
+      59: aload_0
+      60: invokeinterface #224,  1          // InterfaceMethod net/minecraft/inventory/Inventory.size:()I
+      65: i2f
+      66: fdiv
+      67: fstore_1
+      68: fload_1
+      69: iconst_0
+      70: bipush        15
+      72: invokestatic  #942                // Method net/minecraft/util/math/MathHelper.lerpPositive:(FII)I
+      75: ireturn
+
+  public void setCursorStack(net.minecraft.item.ItemStack);
+    Code:
+       0: aload_0
+       1: aload_1
+       2: putfield      #106                // Field cursorStack:Lnet/minecraft/item/ItemStack;
+       5: return
+
+  public net.minecraft.item.ItemStack getCursorStack();
+    Code:
+       0: aload_0
+       1: getfield      #106                // Field cursorStack:Lnet/minecraft/item/ItemStack;
+       4: areturn
+
+  public void disableSyncing();
+    Code:
+       0: aload_0
+       1: iconst_1
+       2: putfield      #461                // Field disableSync:Z
+       5: return
+
+  public void enableSyncing();
+    Code:
+       0: aload_0
+       1: iconst_0
+       2: putfield      #461                // Field disableSync:Z
+       5: return
+
+  public void copySharedSlots(net.minecraft.screen.ScreenHandler);
+    Code:
+       0: invokestatic  #952                // Method com/google/common/collect/HashBasedTable.create:()Lcom/google/common/collect/HashBasedTable;
+       3: astore_2
+       4: iconst_0
+       5: istore_3
+       6: iload_3
+       7: aload_1
+       8: getfield      #91                 // Field slots:Lnet/minecraft/util/collection/DefaultedList;
+      11: invokevirtual #254                // Method net/minecraft/util/collection/DefaultedList.size:()I
+      14: if_icmpge     60
+      17: aload_1
+      18: getfield      #91                 // Field slots:Lnet/minecraft/util/collection/DefaultedList;
+      21: iload_3
+      22: invokevirtual #332                // Method net/minecraft/util/collection/DefaultedList.get:(I)Ljava/lang/Object;
+      25: checkcast     #143                // class net/minecraft/screen/slot/Slot
+      28: astore        4
+      30: aload_2
+      31: aload         4
+      33: getfield      #954                // Field net/minecraft/screen/slot/Slot.inventory:Lnet/minecraft/inventory/Inventory;
+      36: aload         4
+      38: invokevirtual #957                // Method net/minecraft/screen/slot/Slot.getIndex:()I
+      41: invokestatic  #493                // Method java/lang/Integer.valueOf:(I)Ljava/lang/Integer;
+      44: iload_3
+      45: invokestatic  #493                // Method java/lang/Integer.valueOf:(I)Ljava/lang/Integer;
+      48: invokeinterface #963,  4          // InterfaceMethod com/google/common/collect/Table.put:(Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+      53: pop
+      54: iinc          3, 1
+      57: goto          6
+      60: iconst_0
+      61: istore_3
+      62: iload_3
+      63: aload_0
+      64: getfield      #91                 // Field slots:Lnet/minecraft/util/collection/DefaultedList;
+      67: invokevirtual #254                // Method net/minecraft/util/collection/DefaultedList.size:()I
+      70: if_icmpge     212
+      73: aload_0
+      74: getfield      #91                 // Field slots:Lnet/minecraft/util/collection/DefaultedList;
+      77: iload_3
+      78: invokevirtual #332                // Method net/minecraft/util/collection/DefaultedList.get:(I)Ljava/lang/Object;
+      81: checkcast     #143                // class net/minecraft/screen/slot/Slot
+      84: astore        4
+      86: aload_2
+      87: aload         4
+      89: getfield      #954                // Field net/minecraft/screen/slot/Slot.inventory:Lnet/minecraft/inventory/Inventory;
+      92: aload         4
+      94: invokevirtual #957                // Method net/minecraft/screen/slot/Slot.getIndex:()I
+      97: invokestatic  #493                // Method java/lang/Integer.valueOf:(I)Ljava/lang/Integer;
+     100: invokeinterface #965,  3          // InterfaceMethod com/google/common/collect/Table.get:(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+     105: checkcast     #490                // class java/lang/Integer
+     108: astore        5
+     110: aload         5
+     112: ifnull        206
+     115: aload_0
+     116: getfield      #89                 // Field trackedStacks:Lnet/minecraft/util/collection/DefaultedList;
+     119: iload_3
+     120: aload_1
+     121: getfield      #89                 // Field trackedStacks:Lnet/minecraft/util/collection/DefaultedList;
+     124: aload         5
+     126: invokevirtual #968                // Method java/lang/Integer.intValue:()I
+     129: invokevirtual #332                // Method net/minecraft/util/collection/DefaultedList.get:(I)Ljava/lang/Object;
+     132: checkcast     #101                // class net/minecraft/item/ItemStack
+     135: invokevirtual #455                // Method net/minecraft/util/collection/DefaultedList.set:(ILjava/lang/Object;)Ljava/lang/Object;
+     138: pop
+     139: aload_1
+     140: getfield      #108                // Field trackedSlots:Lnet/minecraft/util/collection/DefaultedList;
+     143: aload         5
+     145: invokevirtual #968                // Method java/lang/Integer.intValue:()I
+     148: invokevirtual #332                // Method net/minecraft/util/collection/DefaultedList.get:(I)Ljava/lang/Object;
+     151: checkcast     #16                 // class net/minecraft/screen/sync/TrackedSlot
+     154: astore        6
+     156: aload_0
+     157: getfield      #108                // Field trackedSlots:Lnet/minecraft/util/collection/DefaultedList;
+     160: iload_3
+     161: invokevirtual #332                // Method net/minecraft/util/collection/DefaultedList.get:(I)Ljava/lang/Object;
+     164: checkcast     #16                 // class net/minecraft/screen/sync/TrackedSlot
+     167: astore        7
+     169: aload         6
+     171: instanceof    #14                 // class net/minecraft/screen/sync/TrackedSlot$Impl
+     174: ifeq          206
+     177: aload         6
+     179: checkcast     #14                 // class net/minecraft/screen/sync/TrackedSlot$Impl
+     182: astore        8
+     184: aload         7
+     186: instanceof    #14                 // class net/minecraft/screen/sync/TrackedSlot$Impl
+     189: ifeq          206
+     192: aload         7
+     194: checkcast     #14                 // class net/minecraft/screen/sync/TrackedSlot$Impl
+     197: astore        9
+     199: aload         9
+     201: aload         8
+     203: invokevirtual #972                // Method net/minecraft/screen/sync/TrackedSlot$Impl.copyFrom:(Lnet/minecraft/screen/sync/TrackedSlot$Impl;)V
+     206: iinc          3, 1
+     209: goto          62
+     212: return
+
+  public java.util.OptionalInt getSlotIndex(net.minecraft.inventory.Inventory, int);
+    Code:
+       0: iconst_0
+       1: istore_3
+       2: iload_3
+       3: aload_0
+       4: getfield      #91                 // Field slots:Lnet/minecraft/util/collection/DefaultedList;
+       7: invokevirtual #254                // Method net/minecraft/util/collection/DefaultedList.size:()I
+      10: if_icmpge     55
+      13: aload_0
+      14: getfield      #91                 // Field slots:Lnet/minecraft/util/collection/DefaultedList;
+      17: iload_3
+      18: invokevirtual #332                // Method net/minecraft/util/collection/DefaultedList.get:(I)Ljava/lang/Object;
+      21: checkcast     #143                // class net/minecraft/screen/slot/Slot
+      24: astore        4
+      26: aload         4
+      28: getfield      #954                // Field net/minecraft/screen/slot/Slot.inventory:Lnet/minecraft/inventory/Inventory;
+      31: aload_1
+      32: if_acmpne     49
+      35: iload_2
+      36: aload         4
+      38: invokevirtual #957                // Method net/minecraft/screen/slot/Slot.getIndex:()I
+      41: if_icmpne     49
+      44: iload_3
+      45: invokestatic  #988                // Method java/util/OptionalInt.of:(I)Ljava/util/OptionalInt;
+      48: areturn
+      49: iinc          3, 1
+      52: goto          2
+      55: invokestatic  #992                // Method java/util/OptionalInt.empty:()Ljava/util/OptionalInt;
+      58: areturn
+
+  public int getRevision();
+    Code:
+       0: aload_0
+       1: getfield      #897                // Field revision:I
+       4: ireturn
+
+  public int nextRevision();
+    Code:
+       0: aload_0
+       1: aload_0
+       2: getfield      #897                // Field revision:I
+       5: iconst_1
+       6: iadd
+       7: sipush        32767
+      10: iand
+      11: putfield      #897                // Field revision:I
+      14: aload_0
+      15: getfield      #897                // Field revision:I
+      18: ireturn
+
+  private static void method_34251(net.minecraft.item.ItemStack, net.minecraft.screen.slot.Slot, net.minecraft.entity.player.PlayerEntity, net.minecraft.item.ItemStack);
+    Code:
+       0: aload_0
+       1: aload_3
+       2: invokevirtual #635                // Method net/minecraft/item/ItemStack.getCount:()I
+       5: invokevirtual #800                // Method net/minecraft/item/ItemStack.increment:(I)V
+       8: aload_1
+       9: aload_2
+      10: aload_3
+      11: invokevirtual #770                // Method net/minecraft/screen/slot/Slot.onTakeItem:(Lnet/minecraft/entity/player/PlayerEntity;Lnet/minecraft/item/ItemStack;)V
+      14: return
+
+  private void method_34249(net.minecraft.screen.slot.Slot, net.minecraft.entity.player.PlayerEntity, net.minecraft.item.ItemStack);
+    Code:
+       0: aload_0
+       1: aload_3
+       2: invokevirtual #678                // Method setCursorStack:(Lnet/minecraft/item/ItemStack;)V
+       5: aload_1
+       6: aload_2
+       7: aload_3
+       8: invokevirtual #770                // Method net/minecraft/screen/slot/Slot.onTakeItem:(Lnet/minecraft/entity/player/PlayerEntity;Lnet/minecraft/item/ItemStack;)V
+      11: return
+
+  private java.lang.String method_30024() throws java.lang.Exception;
+    Code:
+       0: aload_0
+       1: invokevirtual #999                // Method java/lang/Object.getClass:()Ljava/lang/Class;
+       4: invokevirtual #1004               // Method java/lang/Class.getCanonicalName:()Ljava/lang/String;
+       7: areturn
+
+  private java.lang.String method_30011() throws java.lang.Exception;
+    Code:
+       0: aload_0
+       1: getfield      #132                // Field type:Lnet/minecraft/screen/ScreenHandlerType;
+       4: ifnull        25
+       7: getstatic     #1010               // Field net/minecraft/registry/Registries.SCREEN_HANDLER:Lnet/minecraft/registry/Registry;
+      10: aload_0
+      11: getfield      #132                // Field type:Lnet/minecraft/screen/ScreenHandlerType;
+      14: invokeinterface #1016,  2         // InterfaceMethod net/minecraft/registry/Registry.getId:(Ljava/lang/Object;)Lnet/minecraft/util/Identifier;
+      19: invokevirtual #1021               // Method net/minecraft/util/Identifier.toString:()Ljava/lang/String;
+      22: goto          28
+      25: ldc_w         #1023               // String <no type>
+      28: areturn
+
+  private static net.minecraft.screen.sync.TrackedSlot method_68804(net.minecraft.screen.ScreenHandlerSyncHandler, net.minecraft.screen.sync.TrackedSlot);
+    Code:
+       0: aload_0
+       1: invokeinterface #269,  1          // InterfaceMethod net/minecraft/screen/ScreenHandlerSyncHandler.createTrackedSlot:()Lnet/minecraft/screen/sync/TrackedSlot;
+       6: areturn
+
+  private static java.lang.Boolean method_17696(net.minecraft.block.Block, net.minecraft.entity.player.PlayerEntity, net.minecraft.world.World, net.minecraft.util.math.BlockPos);
+    Code:
+       0: aload_2
+       1: aload_3
+       2: invokevirtual #1032               // Method net/minecraft/world/World.getBlockState:(Lnet/minecraft/util/math/BlockPos;)Lnet/minecraft/block/BlockState;
+       5: aload_0
+       6: invokevirtual #1038               // Method net/minecraft/block/BlockState.isOf:(Lnet/minecraft/block/Block;)Z
+       9: ifne          17
+      12: iconst_0
+      13: invokestatic  #191                // Method java/lang/Boolean.valueOf:(Z)Ljava/lang/Boolean;
+      16: areturn
+      17: aload_1
+      18: aload_3
+      19: ldc2_w        #1041               // double 4.0d
+      22: invokevirtual #1046               // Method net/minecraft/entity/player/PlayerEntity.canInteractWithBlockAt:(Lnet/minecraft/util/math/BlockPos;D)Z
+      25: invokestatic  #191                // Method java/lang/Boolean.valueOf:(Z)Ljava/lang/Boolean;
+      28: areturn
+
+  static {};
+    Code:
+       0: invokestatic  #1055               // Method com/mojang/logging/LogUtils.getLogger:()Lorg/slf4j/Logger;
+       3: putstatic     #486                // Field LOGGER:Lorg/slf4j/Logger;
+       6: return
+}

@@ -1,0 +1,38 @@
+{
+	"schemaVersion": 1,
+	"id": "fishka",
+	"version": "${version}",
+	"name": "Fishka",
+	"description": "Серверный RPG-мод про рыбалку для Fabric 1.21.5.",
+	"authors": [
+		"Feuda"
+	],
+	"contact": {
+		"homepage": "https://github.com/feuda/fishka",
+		"sources": "https://github.com/feuda/fishka"
+	},
+	"license": "All-Rights-Reserved",
+	"icon": "assets/fishka/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"feuda.fishka.Fishka"
+		],
+		"client": [
+			"feuda.fishka.FishkaClient"
+		],
+		"fabric-datagen": [
+			"feuda.fishka.FishkaDataGenerator"
+		]
+	},
+	"mixins": [
+		"fishka.mixins.json"
+	],
+	"depends": {
+		"fabricloader": ">=0.18.4",
+		"minecraft": "~1.21.5",
+		"java": ">=21",
+		"fabric-api": "*",
+		"geckolib": ">=5.0"
+	}
+}

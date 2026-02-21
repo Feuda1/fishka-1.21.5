@@ -1,0 +1,1522 @@
+Compiled from "ClientPlayerInteractionManager.java"
+public class net.minecraft.client.network.ClientPlayerInteractionManager {
+  private static final org.slf4j.Logger LOGGER;
+
+  private final net.minecraft.client.MinecraftClient client;
+
+  private final net.minecraft.client.network.ClientPlayNetworkHandler networkHandler;
+
+  private net.minecraft.util.math.BlockPos currentBreakingPos;
+
+  private net.minecraft.item.ItemStack selectedStack;
+
+  private float currentBreakingProgress;
+
+  private float blockBreakingSoundCooldown;
+
+  private int blockBreakingCooldown;
+
+  private boolean breakingBlock;
+
+  private net.minecraft.world.GameMode gameMode;
+
+  private net.minecraft.world.GameMode previousGameMode;
+
+  private int lastSelectedSlot;
+
+  public net.minecraft.client.network.ClientPlayerInteractionManager(net.minecraft.client.MinecraftClient, net.minecraft.client.network.ClientPlayNetworkHandler);
+    Code:
+       0: aload_0
+       1: invokespecial #61                 // Method java/lang/Object."<init>":()V
+       4: aload_0
+       5: new           #63                 // class net/minecraft/util/math/BlockPos
+       8: dup
+       9: iconst_m1
+      10: iconst_m1
+      11: iconst_m1
+      12: invokespecial #66                 // Method net/minecraft/util/math/BlockPos."<init>":(III)V
+      15: putfield      #68                 // Field currentBreakingPos:Lnet/minecraft/util/math/BlockPos;
+      18: aload_0
+      19: getstatic     #73                 // Field net/minecraft/item/ItemStack.EMPTY:Lnet/minecraft/item/ItemStack;
+      22: putfield      #75                 // Field selectedStack:Lnet/minecraft/item/ItemStack;
+      25: aload_0
+      26: getstatic     #80                 // Field net/minecraft/world/GameMode.DEFAULT:Lnet/minecraft/world/GameMode;
+      29: putfield      #82                 // Field gameMode:Lnet/minecraft/world/GameMode;
+      32: aload_0
+      33: aload_1
+      34: putfield      #84                 // Field client:Lnet/minecraft/client/MinecraftClient;
+      37: aload_0
+      38: aload_2
+      39: putfield      #86                 // Field networkHandler:Lnet/minecraft/client/network/ClientPlayNetworkHandler;
+      42: return
+
+  public void copyAbilities(net.minecraft.entity.player.PlayerEntity);
+    Code:
+       0: aload_0
+       1: getfield      #82                 // Field gameMode:Lnet/minecraft/world/GameMode;
+       4: aload_1
+       5: invokevirtual #97                 // Method net/minecraft/entity/player/PlayerEntity.getAbilities:()Lnet/minecraft/entity/player/PlayerAbilities;
+       8: invokevirtual #101                // Method net/minecraft/world/GameMode.setAbilities:(Lnet/minecraft/entity/player/PlayerAbilities;)V
+      11: return
+
+  public void setGameModes(net.minecraft.world.GameMode, net.minecraft.world.GameMode);
+    Code:
+       0: aload_0
+       1: aload_1
+       2: putfield      #82                 // Field gameMode:Lnet/minecraft/world/GameMode;
+       5: aload_0
+       6: aload_2
+       7: putfield      #106                // Field previousGameMode:Lnet/minecraft/world/GameMode;
+      10: aload_0
+      11: getfield      #82                 // Field gameMode:Lnet/minecraft/world/GameMode;
+      14: aload_0
+      15: getfield      #84                 // Field client:Lnet/minecraft/client/MinecraftClient;
+      18: getfield      #111                // Field net/minecraft/client/MinecraftClient.player:Lnet/minecraft/client/network/ClientPlayerEntity;
+      21: invokevirtual #114                // Method net/minecraft/client/network/ClientPlayerEntity.getAbilities:()Lnet/minecraft/entity/player/PlayerAbilities;
+      24: invokevirtual #101                // Method net/minecraft/world/GameMode.setAbilities:(Lnet/minecraft/entity/player/PlayerAbilities;)V
+      27: return
+
+  public void setGameMode(net.minecraft.world.GameMode);
+    Code:
+       0: aload_1
+       1: aload_0
+       2: getfield      #82                 // Field gameMode:Lnet/minecraft/world/GameMode;
+       5: if_acmpeq     16
+       8: aload_0
+       9: aload_0
+      10: getfield      #82                 // Field gameMode:Lnet/minecraft/world/GameMode;
+      13: putfield      #106                // Field previousGameMode:Lnet/minecraft/world/GameMode;
+      16: aload_0
+      17: aload_1
+      18: putfield      #82                 // Field gameMode:Lnet/minecraft/world/GameMode;
+      21: aload_0
+      22: getfield      #82                 // Field gameMode:Lnet/minecraft/world/GameMode;
+      25: aload_0
+      26: getfield      #84                 // Field client:Lnet/minecraft/client/MinecraftClient;
+      29: getfield      #111                // Field net/minecraft/client/MinecraftClient.player:Lnet/minecraft/client/network/ClientPlayerEntity;
+      32: invokevirtual #114                // Method net/minecraft/client/network/ClientPlayerEntity.getAbilities:()Lnet/minecraft/entity/player/PlayerAbilities;
+      35: invokevirtual #101                // Method net/minecraft/world/GameMode.setAbilities:(Lnet/minecraft/entity/player/PlayerAbilities;)V
+      38: return
+
+  public boolean hasStatusBars();
+    Code:
+       0: aload_0
+       1: getfield      #82                 // Field gameMode:Lnet/minecraft/world/GameMode;
+       4: invokevirtual #121                // Method net/minecraft/world/GameMode.isSurvivalLike:()Z
+       7: ireturn
+
+  public boolean breakBlock(net.minecraft.util.math.BlockPos);
+    Code:
+       0: aload_0
+       1: getfield      #84                 // Field client:Lnet/minecraft/client/MinecraftClient;
+       4: getfield      #111                // Field net/minecraft/client/MinecraftClient.player:Lnet/minecraft/client/network/ClientPlayerEntity;
+       7: aload_0
+       8: getfield      #84                 // Field client:Lnet/minecraft/client/MinecraftClient;
+      11: getfield      #128                // Field net/minecraft/client/MinecraftClient.world:Lnet/minecraft/client/world/ClientWorld;
+      14: aload_1
+      15: aload_0
+      16: getfield      #82                 // Field gameMode:Lnet/minecraft/world/GameMode;
+      19: invokevirtual #132                // Method net/minecraft/client/network/ClientPlayerEntity.isBlockBreakingRestricted:(Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/world/GameMode;)Z
+      22: ifeq          27
+      25: iconst_0
+      26: ireturn
+      27: aload_0
+      28: getfield      #84                 // Field client:Lnet/minecraft/client/MinecraftClient;
+      31: getfield      #128                // Field net/minecraft/client/MinecraftClient.world:Lnet/minecraft/client/world/ClientWorld;
+      34: astore_2
+      35: aload_2
+      36: aload_1
+      37: invokevirtual #138                // Method net/minecraft/world/World.getBlockState:(Lnet/minecraft/util/math/BlockPos;)Lnet/minecraft/block/BlockState;
+      40: astore_3
+      41: aload_0
+      42: getfield      #84                 // Field client:Lnet/minecraft/client/MinecraftClient;
+      45: getfield      #111                // Field net/minecraft/client/MinecraftClient.player:Lnet/minecraft/client/network/ClientPlayerEntity;
+      48: invokevirtual #142                // Method net/minecraft/client/network/ClientPlayerEntity.getMainHandStack:()Lnet/minecraft/item/ItemStack;
+      51: aload_3
+      52: aload_2
+      53: aload_1
+      54: aload_0
+      55: getfield      #84                 // Field client:Lnet/minecraft/client/MinecraftClient;
+      58: getfield      #111                // Field net/minecraft/client/MinecraftClient.player:Lnet/minecraft/client/network/ClientPlayerEntity;
+      61: invokevirtual #146                // Method net/minecraft/item/ItemStack.canMine:(Lnet/minecraft/block/BlockState;Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/entity/player/PlayerEntity;)Z
+      64: ifne          69
+      67: iconst_0
+      68: ireturn
+      69: aload_3
+      70: invokevirtual #154                // Method net/minecraft/block/BlockState.getBlock:()Lnet/minecraft/block/Block;
+      73: astore        4
+      75: aload         4
+      77: instanceof    #156                // class net/minecraft/block/OperatorBlock
+      80: ifeq          98
+      83: aload_0
+      84: getfield      #84                 // Field client:Lnet/minecraft/client/MinecraftClient;
+      87: getfield      #111                // Field net/minecraft/client/MinecraftClient.player:Lnet/minecraft/client/network/ClientPlayerEntity;
+      90: invokevirtual #159                // Method net/minecraft/client/network/ClientPlayerEntity.isCreativeLevelTwoOp:()Z
+      93: ifne          98
+      96: iconst_0
+      97: ireturn
+      98: aload_3
+      99: invokevirtual #164                // Method net/minecraft/block/BlockState.isAir:()Z
+     102: ifeq          107
+     105: iconst_0
+     106: ireturn
+     107: aload         4
+     109: aload_2
+     110: aload_1
+     111: aload_3
+     112: aload_0
+     113: getfield      #84                 // Field client:Lnet/minecraft/client/MinecraftClient;
+     116: getfield      #111                // Field net/minecraft/client/MinecraftClient.player:Lnet/minecraft/client/network/ClientPlayerEntity;
+     119: invokevirtual #168                // Method net/minecraft/block/Block.onBreak:(Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/BlockState;Lnet/minecraft/entity/player/PlayerEntity;)Lnet/minecraft/block/BlockState;
+     122: pop
+     123: aload_2
+     124: aload_1
+     125: invokevirtual #172                // Method net/minecraft/world/World.getFluidState:(Lnet/minecraft/util/math/BlockPos;)Lnet/minecraft/fluid/FluidState;
+     128: astore        5
+     130: aload_2
+     131: aload_1
+     132: aload         5
+     134: invokevirtual #177                // Method net/minecraft/fluid/FluidState.getBlockState:()Lnet/minecraft/block/BlockState;
+     137: bipush        11
+     139: invokevirtual #181                // Method net/minecraft/world/World.setBlockState:(Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/BlockState;I)Z
+     142: istore        6
+     144: iload         6
+     146: ifeq          157
+     149: aload         4
+     151: aload_2
+     152: aload_1
+     153: aload_3
+     154: invokevirtual #185                // Method net/minecraft/block/Block.onBroken:(Lnet/minecraft/world/WorldAccess;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/BlockState;)V
+     157: iload         6
+     159: ireturn
+
+  public boolean attackBlock(net.minecraft.util.math.BlockPos, net.minecraft.util.math.Direction);
+    Code:
+       0: aload_0
+       1: getfield      #84                 // Field client:Lnet/minecraft/client/MinecraftClient;
+       4: getfield      #111                // Field net/minecraft/client/MinecraftClient.player:Lnet/minecraft/client/network/ClientPlayerEntity;
+       7: aload_0
+       8: getfield      #84                 // Field client:Lnet/minecraft/client/MinecraftClient;
+      11: getfield      #128                // Field net/minecraft/client/MinecraftClient.world:Lnet/minecraft/client/world/ClientWorld;
+      14: aload_1
+      15: aload_0
+      16: getfield      #82                 // Field gameMode:Lnet/minecraft/world/GameMode;
+      19: invokevirtual #132                // Method net/minecraft/client/network/ClientPlayerEntity.isBlockBreakingRestricted:(Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/world/GameMode;)Z
+      22: ifeq          27
+      25: iconst_0
+      26: ireturn
+      27: aload_0
+      28: getfield      #84                 // Field client:Lnet/minecraft/client/MinecraftClient;
+      31: getfield      #128                // Field net/minecraft/client/MinecraftClient.world:Lnet/minecraft/client/world/ClientWorld;
+      34: invokevirtual #200                // Method net/minecraft/client/world/ClientWorld.getWorldBorder:()Lnet/minecraft/world/border/WorldBorder;
+      37: aload_1
+      38: invokevirtual #205                // Method net/minecraft/world/border/WorldBorder.contains:(Lnet/minecraft/util/math/BlockPos;)Z
+      41: ifne          46
+      44: iconst_0
+      45: ireturn
+      46: aload_0
+      47: getfield      #84                 // Field client:Lnet/minecraft/client/MinecraftClient;
+      50: getfield      #111                // Field net/minecraft/client/MinecraftClient.player:Lnet/minecraft/client/network/ClientPlayerEntity;
+      53: invokevirtual #114                // Method net/minecraft/client/network/ClientPlayerEntity.getAbilities:()Lnet/minecraft/entity/player/PlayerAbilities;
+      56: getfield      #210                // Field net/minecraft/entity/player/PlayerAbilities.creativeMode:Z
+      59: ifeq          121
+      62: aload_0
+      63: getfield      #84                 // Field client:Lnet/minecraft/client/MinecraftClient;
+      66: getfield      #128                // Field net/minecraft/client/MinecraftClient.world:Lnet/minecraft/client/world/ClientWorld;
+      69: aload_1
+      70: invokevirtual #211                // Method net/minecraft/client/world/ClientWorld.getBlockState:(Lnet/minecraft/util/math/BlockPos;)Lnet/minecraft/block/BlockState;
+      73: astore_3
+      74: aload_0
+      75: getfield      #84                 // Field client:Lnet/minecraft/client/MinecraftClient;
+      78: invokevirtual #215                // Method net/minecraft/client/MinecraftClient.getTutorialManager:()Lnet/minecraft/client/tutorial/TutorialManager;
+      81: aload_0
+      82: getfield      #84                 // Field client:Lnet/minecraft/client/MinecraftClient;
+      85: getfield      #128                // Field net/minecraft/client/MinecraftClient.world:Lnet/minecraft/client/world/ClientWorld;
+      88: aload_1
+      89: aload_3
+      90: fconst_1
+      91: invokevirtual #221                // Method net/minecraft/client/tutorial/TutorialManager.onBlockBreaking:(Lnet/minecraft/client/world/ClientWorld;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/BlockState;F)V
+      94: aload_0
+      95: aload_0
+      96: getfield      #84                 // Field client:Lnet/minecraft/client/MinecraftClient;
+      99: getfield      #128                // Field net/minecraft/client/MinecraftClient.world:Lnet/minecraft/client/world/ClientWorld;
+     102: aload_0
+     103: aload_1
+     104: aload_2
+     105: invokedynamic #239,  0            // InvokeDynamic #0:predict:(Lnet/minecraft/client/network/ClientPlayerInteractionManager;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/util/math/Direction;)Lnet/minecraft/client/network/SequencedPacketCreator;
+     110: invokevirtual #243                // Method sendSequencedPacket:(Lnet/minecraft/client/world/ClientWorld;Lnet/minecraft/client/network/SequencedPacketCreator;)V
+     113: aload_0
+     114: iconst_5
+     115: putfield      #245                // Field blockBreakingCooldown:I
+     118: goto          217
+     121: aload_0
+     122: getfield      #247                // Field breakingBlock:Z
+     125: ifeq          136
+     128: aload_0
+     129: aload_1
+     130: invokevirtual #250                // Method isCurrentlyBreaking:(Lnet/minecraft/util/math/BlockPos;)Z
+     133: ifne          217
+     136: aload_0
+     137: getfield      #247                // Field breakingBlock:Z
+     140: ifeq          165
+     143: aload_0
+     144: getfield      #86                 // Field networkHandler:Lnet/minecraft/client/network/ClientPlayNetworkHandler;
+     147: new           #9                  // class net/minecraft/network/packet/c2s/play/PlayerActionC2SPacket
+     150: dup
+     151: getstatic     #254                // Field net/minecraft/network/packet/c2s/play/PlayerActionC2SPacket$Action.ABORT_DESTROY_BLOCK:Lnet/minecraft/network/packet/c2s/play/PlayerActionC2SPacket$Action;
+     154: aload_0
+     155: getfield      #68                 // Field currentBreakingPos:Lnet/minecraft/util/math/BlockPos;
+     158: aload_2
+     159: invokespecial #257                // Method net/minecraft/network/packet/c2s/play/PlayerActionC2SPacket."<init>":(Lnet/minecraft/network/packet/c2s/play/PlayerActionC2SPacket$Action;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/util/math/Direction;)V
+     162: invokevirtual #263                // Method net/minecraft/client/network/ClientPlayNetworkHandler.sendPacket:(Lnet/minecraft/network/packet/Packet;)V
+     165: aload_0
+     166: getfield      #84                 // Field client:Lnet/minecraft/client/MinecraftClient;
+     169: getfield      #128                // Field net/minecraft/client/MinecraftClient.world:Lnet/minecraft/client/world/ClientWorld;
+     172: aload_1
+     173: invokevirtual #211                // Method net/minecraft/client/world/ClientWorld.getBlockState:(Lnet/minecraft/util/math/BlockPos;)Lnet/minecraft/block/BlockState;
+     176: astore_3
+     177: aload_0
+     178: getfield      #84                 // Field client:Lnet/minecraft/client/MinecraftClient;
+     181: invokevirtual #215                // Method net/minecraft/client/MinecraftClient.getTutorialManager:()Lnet/minecraft/client/tutorial/TutorialManager;
+     184: aload_0
+     185: getfield      #84                 // Field client:Lnet/minecraft/client/MinecraftClient;
+     188: getfield      #128                // Field net/minecraft/client/MinecraftClient.world:Lnet/minecraft/client/world/ClientWorld;
+     191: aload_1
+     192: aload_3
+     193: fconst_0
+     194: invokevirtual #221                // Method net/minecraft/client/tutorial/TutorialManager.onBlockBreaking:(Lnet/minecraft/client/world/ClientWorld;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/BlockState;F)V
+     197: aload_0
+     198: aload_0
+     199: getfield      #84                 // Field client:Lnet/minecraft/client/MinecraftClient;
+     202: getfield      #128                // Field net/minecraft/client/MinecraftClient.world:Lnet/minecraft/client/world/ClientWorld;
+     205: aload_0
+     206: aload_3
+     207: aload_1
+     208: aload_2
+     209: invokedynamic #271,  0            // InvokeDynamic #1:predict:(Lnet/minecraft/client/network/ClientPlayerInteractionManager;Lnet/minecraft/block/BlockState;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/util/math/Direction;)Lnet/minecraft/client/network/SequencedPacketCreator;
+     214: invokevirtual #243                // Method sendSequencedPacket:(Lnet/minecraft/client/world/ClientWorld;Lnet/minecraft/client/network/SequencedPacketCreator;)V
+     217: iconst_1
+     218: ireturn
+
+  public void cancelBlockBreaking();
+    Code:
+       0: aload_0
+       1: getfield      #247                // Field breakingBlock:Z
+       4: ifeq          116
+       7: aload_0
+       8: getfield      #84                 // Field client:Lnet/minecraft/client/MinecraftClient;
+      11: getfield      #128                // Field net/minecraft/client/MinecraftClient.world:Lnet/minecraft/client/world/ClientWorld;
+      14: aload_0
+      15: getfield      #68                 // Field currentBreakingPos:Lnet/minecraft/util/math/BlockPos;
+      18: invokevirtual #211                // Method net/minecraft/client/world/ClientWorld.getBlockState:(Lnet/minecraft/util/math/BlockPos;)Lnet/minecraft/block/BlockState;
+      21: astore_1
+      22: aload_0
+      23: getfield      #84                 // Field client:Lnet/minecraft/client/MinecraftClient;
+      26: invokevirtual #215                // Method net/minecraft/client/MinecraftClient.getTutorialManager:()Lnet/minecraft/client/tutorial/TutorialManager;
+      29: aload_0
+      30: getfield      #84                 // Field client:Lnet/minecraft/client/MinecraftClient;
+      33: getfield      #128                // Field net/minecraft/client/MinecraftClient.world:Lnet/minecraft/client/world/ClientWorld;
+      36: aload_0
+      37: getfield      #68                 // Field currentBreakingPos:Lnet/minecraft/util/math/BlockPos;
+      40: aload_1
+      41: ldc_w         #274                // float -1.0f
+      44: invokevirtual #221                // Method net/minecraft/client/tutorial/TutorialManager.onBlockBreaking:(Lnet/minecraft/client/world/ClientWorld;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/BlockState;F)V
+      47: aload_0
+      48: getfield      #86                 // Field networkHandler:Lnet/minecraft/client/network/ClientPlayNetworkHandler;
+      51: new           #9                  // class net/minecraft/network/packet/c2s/play/PlayerActionC2SPacket
+      54: dup
+      55: getstatic     #254                // Field net/minecraft/network/packet/c2s/play/PlayerActionC2SPacket$Action.ABORT_DESTROY_BLOCK:Lnet/minecraft/network/packet/c2s/play/PlayerActionC2SPacket$Action;
+      58: aload_0
+      59: getfield      #68                 // Field currentBreakingPos:Lnet/minecraft/util/math/BlockPos;
+      62: getstatic     #279                // Field net/minecraft/util/math/Direction.DOWN:Lnet/minecraft/util/math/Direction;
+      65: invokespecial #257                // Method net/minecraft/network/packet/c2s/play/PlayerActionC2SPacket."<init>":(Lnet/minecraft/network/packet/c2s/play/PlayerActionC2SPacket$Action;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/util/math/Direction;)V
+      68: invokevirtual #263                // Method net/minecraft/client/network/ClientPlayNetworkHandler.sendPacket:(Lnet/minecraft/network/packet/Packet;)V
+      71: aload_0
+      72: iconst_0
+      73: putfield      #247                // Field breakingBlock:Z
+      76: aload_0
+      77: fconst_0
+      78: putfield      #281                // Field currentBreakingProgress:F
+      81: aload_0
+      82: getfield      #84                 // Field client:Lnet/minecraft/client/MinecraftClient;
+      85: getfield      #128                // Field net/minecraft/client/MinecraftClient.world:Lnet/minecraft/client/world/ClientWorld;
+      88: aload_0
+      89: getfield      #84                 // Field client:Lnet/minecraft/client/MinecraftClient;
+      92: getfield      #111                // Field net/minecraft/client/MinecraftClient.player:Lnet/minecraft/client/network/ClientPlayerEntity;
+      95: invokevirtual #285                // Method net/minecraft/client/network/ClientPlayerEntity.getId:()I
+      98: aload_0
+      99: getfield      #68                 // Field currentBreakingPos:Lnet/minecraft/util/math/BlockPos;
+     102: iconst_m1
+     103: invokevirtual #289                // Method net/minecraft/client/world/ClientWorld.setBlockBreakingInfo:(ILnet/minecraft/util/math/BlockPos;I)V
+     106: aload_0
+     107: getfield      #84                 // Field client:Lnet/minecraft/client/MinecraftClient;
+     110: getfield      #111                // Field net/minecraft/client/MinecraftClient.player:Lnet/minecraft/client/network/ClientPlayerEntity;
+     113: invokevirtual #292                // Method net/minecraft/client/network/ClientPlayerEntity.resetLastAttackedTicks:()V
+     116: return
+
+  public boolean updateBlockBreakingProgress(net.minecraft.util.math.BlockPos, net.minecraft.util.math.Direction);
+    Code:
+       0: aload_0
+       1: invokevirtual #296                // Method syncSelectedSlot:()V
+       4: aload_0
+       5: getfield      #245                // Field blockBreakingCooldown:I
+       8: ifle          23
+      11: aload_0
+      12: dup
+      13: getfield      #245                // Field blockBreakingCooldown:I
+      16: iconst_1
+      17: isub
+      18: putfield      #245                // Field blockBreakingCooldown:I
+      21: iconst_1
+      22: ireturn
+      23: aload_0
+      24: getfield      #84                 // Field client:Lnet/minecraft/client/MinecraftClient;
+      27: getfield      #111                // Field net/minecraft/client/MinecraftClient.player:Lnet/minecraft/client/network/ClientPlayerEntity;
+      30: invokevirtual #114                // Method net/minecraft/client/network/ClientPlayerEntity.getAbilities:()Lnet/minecraft/entity/player/PlayerAbilities;
+      33: getfield      #210                // Field net/minecraft/entity/player/PlayerAbilities.creativeMode:Z
+      36: ifeq          114
+      39: aload_0
+      40: getfield      #84                 // Field client:Lnet/minecraft/client/MinecraftClient;
+      43: getfield      #128                // Field net/minecraft/client/MinecraftClient.world:Lnet/minecraft/client/world/ClientWorld;
+      46: invokevirtual #200                // Method net/minecraft/client/world/ClientWorld.getWorldBorder:()Lnet/minecraft/world/border/WorldBorder;
+      49: aload_1
+      50: invokevirtual #205                // Method net/minecraft/world/border/WorldBorder.contains:(Lnet/minecraft/util/math/BlockPos;)Z
+      53: ifeq          114
+      56: aload_0
+      57: iconst_5
+      58: putfield      #245                // Field blockBreakingCooldown:I
+      61: aload_0
+      62: getfield      #84                 // Field client:Lnet/minecraft/client/MinecraftClient;
+      65: getfield      #128                // Field net/minecraft/client/MinecraftClient.world:Lnet/minecraft/client/world/ClientWorld;
+      68: aload_1
+      69: invokevirtual #211                // Method net/minecraft/client/world/ClientWorld.getBlockState:(Lnet/minecraft/util/math/BlockPos;)Lnet/minecraft/block/BlockState;
+      72: astore_3
+      73: aload_0
+      74: getfield      #84                 // Field client:Lnet/minecraft/client/MinecraftClient;
+      77: invokevirtual #215                // Method net/minecraft/client/MinecraftClient.getTutorialManager:()Lnet/minecraft/client/tutorial/TutorialManager;
+      80: aload_0
+      81: getfield      #84                 // Field client:Lnet/minecraft/client/MinecraftClient;
+      84: getfield      #128                // Field net/minecraft/client/MinecraftClient.world:Lnet/minecraft/client/world/ClientWorld;
+      87: aload_1
+      88: aload_3
+      89: fconst_1
+      90: invokevirtual #221                // Method net/minecraft/client/tutorial/TutorialManager.onBlockBreaking:(Lnet/minecraft/client/world/ClientWorld;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/BlockState;F)V
+      93: aload_0
+      94: aload_0
+      95: getfield      #84                 // Field client:Lnet/minecraft/client/MinecraftClient;
+      98: getfield      #128                // Field net/minecraft/client/MinecraftClient.world:Lnet/minecraft/client/world/ClientWorld;
+     101: aload_0
+     102: aload_1
+     103: aload_2
+     104: invokedynamic #301,  0            // InvokeDynamic #2:predict:(Lnet/minecraft/client/network/ClientPlayerInteractionManager;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/util/math/Direction;)Lnet/minecraft/client/network/SequencedPacketCreator;
+     109: invokevirtual #243                // Method sendSequencedPacket:(Lnet/minecraft/client/world/ClientWorld;Lnet/minecraft/client/network/SequencedPacketCreator;)V
+     112: iconst_1
+     113: ireturn
+     114: aload_0
+     115: aload_1
+     116: invokevirtual #250                // Method isCurrentlyBreaking:(Lnet/minecraft/util/math/BlockPos;)Z
+     119: ifeq          364
+     122: aload_0
+     123: getfield      #84                 // Field client:Lnet/minecraft/client/MinecraftClient;
+     126: getfield      #128                // Field net/minecraft/client/MinecraftClient.world:Lnet/minecraft/client/world/ClientWorld;
+     129: aload_1
+     130: invokevirtual #211                // Method net/minecraft/client/world/ClientWorld.getBlockState:(Lnet/minecraft/util/math/BlockPos;)Lnet/minecraft/block/BlockState;
+     133: astore_3
+     134: aload_3
+     135: invokevirtual #164                // Method net/minecraft/block/BlockState.isAir:()Z
+     138: ifeq          148
+     141: aload_0
+     142: iconst_0
+     143: putfield      #247                // Field breakingBlock:Z
+     146: iconst_0
+     147: ireturn
+     148: aload_0
+     149: dup
+     150: getfield      #281                // Field currentBreakingProgress:F
+     153: aload_3
+     154: aload_0
+     155: getfield      #84                 // Field client:Lnet/minecraft/client/MinecraftClient;
+     158: getfield      #111                // Field net/minecraft/client/MinecraftClient.player:Lnet/minecraft/client/network/ClientPlayerEntity;
+     161: aload_0
+     162: getfield      #84                 // Field client:Lnet/minecraft/client/MinecraftClient;
+     165: getfield      #111                // Field net/minecraft/client/MinecraftClient.player:Lnet/minecraft/client/network/ClientPlayerEntity;
+     168: invokevirtual #305                // Method net/minecraft/client/network/ClientPlayerEntity.getWorld:()Lnet/minecraft/world/World;
+     171: aload_1
+     172: invokevirtual #309                // Method net/minecraft/block/BlockState.calcBlockBreakingDelta:(Lnet/minecraft/entity/player/PlayerEntity;Lnet/minecraft/world/BlockView;Lnet/minecraft/util/math/BlockPos;)F
+     175: fadd
+     176: putfield      #281                // Field currentBreakingProgress:F
+     179: aload_0
+     180: getfield      #311                // Field blockBreakingSoundCooldown:F
+     183: ldc_w         #312                // float 4.0f
+     186: frem
+     187: fconst_0
+     188: fcmpl
+     189: ifne          247
+     192: aload_3
+     193: invokevirtual #316                // Method net/minecraft/block/BlockState.getSoundGroup:()Lnet/minecraft/sound/BlockSoundGroup;
+     196: astore        4
+     198: aload_0
+     199: getfield      #84                 // Field client:Lnet/minecraft/client/MinecraftClient;
+     202: invokevirtual #320                // Method net/minecraft/client/MinecraftClient.getSoundManager:()Lnet/minecraft/client/sound/SoundManager;
+     205: new           #322                // class net/minecraft/client/sound/PositionedSoundInstance
+     208: dup
+     209: aload         4
+     211: invokevirtual #328                // Method net/minecraft/sound/BlockSoundGroup.getHitSound:()Lnet/minecraft/sound/SoundEvent;
+     214: getstatic     #334                // Field net/minecraft/sound/SoundCategory.BLOCKS:Lnet/minecraft/sound/SoundCategory;
+     217: aload         4
+     219: invokevirtual #338                // Method net/minecraft/sound/BlockSoundGroup.getVolume:()F
+     222: fconst_1
+     223: fadd
+     224: ldc_w         #339                // float 8.0f
+     227: fdiv
+     228: aload         4
+     230: invokevirtual #342                // Method net/minecraft/sound/BlockSoundGroup.getPitch:()F
+     233: ldc_w         #343                // float 0.5f
+     236: fmul
+     237: invokestatic  #349                // InterfaceMethod net/minecraft/client/sound/SoundInstance.createRandom:()Lnet/minecraft/util/math/random/Random;
+     240: aload_1
+     241: invokespecial #352                // Method net/minecraft/client/sound/PositionedSoundInstance."<init>":(Lnet/minecraft/sound/SoundEvent;Lnet/minecraft/sound/SoundCategory;FFLnet/minecraft/util/math/random/Random;Lnet/minecraft/util/math/BlockPos;)V
+     244: invokevirtual #358                // Method net/minecraft/client/sound/SoundManager.play:(Lnet/minecraft/client/sound/SoundInstance;)V
+     247: aload_0
+     248: dup
+     249: getfield      #311                // Field blockBreakingSoundCooldown:F
+     252: fconst_1
+     253: fadd
+     254: putfield      #311                // Field blockBreakingSoundCooldown:F
+     257: aload_0
+     258: getfield      #84                 // Field client:Lnet/minecraft/client/MinecraftClient;
+     261: invokevirtual #215                // Method net/minecraft/client/MinecraftClient.getTutorialManager:()Lnet/minecraft/client/tutorial/TutorialManager;
+     264: aload_0
+     265: getfield      #84                 // Field client:Lnet/minecraft/client/MinecraftClient;
+     268: getfield      #128                // Field net/minecraft/client/MinecraftClient.world:Lnet/minecraft/client/world/ClientWorld;
+     271: aload_1
+     272: aload_3
+     273: aload_0
+     274: getfield      #281                // Field currentBreakingProgress:F
+     277: fconst_0
+     278: fconst_1
+     279: invokestatic  #364                // Method net/minecraft/util/math/MathHelper.clamp:(FFF)F
+     282: invokevirtual #221                // Method net/minecraft/client/tutorial/TutorialManager.onBlockBreaking:(Lnet/minecraft/client/world/ClientWorld;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/BlockState;F)V
+     285: aload_0
+     286: getfield      #281                // Field currentBreakingProgress:F
+     289: fconst_1
+     290: fcmpl
+     291: iflt          333
+     294: aload_0
+     295: iconst_0
+     296: putfield      #247                // Field breakingBlock:Z
+     299: aload_0
+     300: aload_0
+     301: getfield      #84                 // Field client:Lnet/minecraft/client/MinecraftClient;
+     304: getfield      #128                // Field net/minecraft/client/MinecraftClient.world:Lnet/minecraft/client/world/ClientWorld;
+     307: aload_0
+     308: aload_1
+     309: aload_2
+     310: invokedynamic #369,  0            // InvokeDynamic #3:predict:(Lnet/minecraft/client/network/ClientPlayerInteractionManager;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/util/math/Direction;)Lnet/minecraft/client/network/SequencedPacketCreator;
+     315: invokevirtual #243                // Method sendSequencedPacket:(Lnet/minecraft/client/world/ClientWorld;Lnet/minecraft/client/network/SequencedPacketCreator;)V
+     318: aload_0
+     319: fconst_0
+     320: putfield      #281                // Field currentBreakingProgress:F
+     323: aload_0
+     324: fconst_0
+     325: putfield      #311                // Field blockBreakingSoundCooldown:F
+     328: aload_0
+     329: iconst_5
+     330: putfield      #245                // Field blockBreakingCooldown:I
+     333: aload_0
+     334: getfield      #84                 // Field client:Lnet/minecraft/client/MinecraftClient;
+     337: getfield      #128                // Field net/minecraft/client/MinecraftClient.world:Lnet/minecraft/client/world/ClientWorld;
+     340: aload_0
+     341: getfield      #84                 // Field client:Lnet/minecraft/client/MinecraftClient;
+     344: getfield      #111                // Field net/minecraft/client/MinecraftClient.player:Lnet/minecraft/client/network/ClientPlayerEntity;
+     347: invokevirtual #285                // Method net/minecraft/client/network/ClientPlayerEntity.getId:()I
+     350: aload_0
+     351: getfield      #68                 // Field currentBreakingPos:Lnet/minecraft/util/math/BlockPos;
+     354: aload_0
+     355: invokevirtual #372                // Method getBlockBreakingProgress:()I
+     358: invokevirtual #289                // Method net/minecraft/client/world/ClientWorld.setBlockBreakingInfo:(ILnet/minecraft/util/math/BlockPos;I)V
+     361: goto          371
+     364: aload_0
+     365: aload_1
+     366: aload_2
+     367: invokevirtual #374                // Method attackBlock:(Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/util/math/Direction;)Z
+     370: ireturn
+     371: iconst_1
+     372: ireturn
+
+  private void sendSequencedPacket(net.minecraft.client.world.ClientWorld, net.minecraft.client.network.SequencedPacketCreator);
+    Code:
+       0: aload_1
+       1: invokevirtual #383                // Method net/minecraft/client/world/ClientWorld.getPendingUpdateManager:()Lnet/minecraft/client/network/PendingUpdateManager;
+       4: invokevirtual #388                // Method net/minecraft/client/network/PendingUpdateManager.incrementSequence:()Lnet/minecraft/client/network/PendingUpdateManager;
+       7: astore_3
+       8: aload_3
+       9: invokevirtual #391                // Method net/minecraft/client/network/PendingUpdateManager.getSequence:()I
+      12: istore        4
+      14: aload_2
+      15: iload         4
+      17: invokeinterface #395,  2          // InterfaceMethod net/minecraft/client/network/SequencedPacketCreator.predict:(I)Lnet/minecraft/network/packet/Packet;
+      22: astore        5
+      24: aload_0
+      25: getfield      #86                 // Field networkHandler:Lnet/minecraft/client/network/ClientPlayNetworkHandler;
+      28: aload         5
+      30: invokevirtual #263                // Method net/minecraft/client/network/ClientPlayNetworkHandler.sendPacket:(Lnet/minecraft/network/packet/Packet;)V
+      33: aload_3
+      34: ifnull        69
+      37: aload_3
+      38: invokevirtual #398                // Method net/minecraft/client/network/PendingUpdateManager.close:()V
+      41: goto          69
+      44: astore        4
+      46: aload_3
+      47: ifnull        66
+      50: aload_3
+      51: invokevirtual #398                // Method net/minecraft/client/network/PendingUpdateManager.close:()V
+      54: goto          66
+      57: astore        5
+      59: aload         4
+      61: aload         5
+      63: invokevirtual #402                // Method java/lang/Throwable.addSuppressed:(Ljava/lang/Throwable;)V
+      66: aload         4
+      68: athrow
+      69: return
+    Exception table:
+       from    to  target type
+           8    33    44   Class java/lang/Throwable
+          50    54    57   Class java/lang/Throwable
+
+  public void tick();
+    Code:
+       0: aload_0
+       1: invokevirtual #296                // Method syncSelectedSlot:()V
+       4: aload_0
+       5: getfield      #86                 // Field networkHandler:Lnet/minecraft/client/network/ClientPlayNetworkHandler;
+       8: invokevirtual #414                // Method net/minecraft/client/network/ClientPlayNetworkHandler.getConnection:()Lnet/minecraft/network/ClientConnection;
+      11: invokevirtual #419                // Method net/minecraft/network/ClientConnection.isOpen:()Z
+      14: ifeq          30
+      17: aload_0
+      18: getfield      #86                 // Field networkHandler:Lnet/minecraft/client/network/ClientPlayNetworkHandler;
+      21: invokevirtual #414                // Method net/minecraft/client/network/ClientPlayNetworkHandler.getConnection:()Lnet/minecraft/network/ClientConnection;
+      24: invokevirtual #421                // Method net/minecraft/network/ClientConnection.tick:()V
+      27: goto          40
+      30: aload_0
+      31: getfield      #86                 // Field networkHandler:Lnet/minecraft/client/network/ClientPlayNetworkHandler;
+      34: invokevirtual #414                // Method net/minecraft/client/network/ClientPlayNetworkHandler.getConnection:()Lnet/minecraft/network/ClientConnection;
+      37: invokevirtual #424                // Method net/minecraft/network/ClientConnection.handleDisconnection:()V
+      40: return
+
+  private boolean isCurrentlyBreaking(net.minecraft.util.math.BlockPos);
+    Code:
+       0: aload_0
+       1: getfield      #84                 // Field client:Lnet/minecraft/client/MinecraftClient;
+       4: getfield      #111                // Field net/minecraft/client/MinecraftClient.player:Lnet/minecraft/client/network/ClientPlayerEntity;
+       7: invokevirtual #142                // Method net/minecraft/client/network/ClientPlayerEntity.getMainHandStack:()Lnet/minecraft/item/ItemStack;
+      10: astore_2
+      11: aload_1
+      12: aload_0
+      13: getfield      #68                 // Field currentBreakingPos:Lnet/minecraft/util/math/BlockPos;
+      16: invokevirtual #428                // Method net/minecraft/util/math/BlockPos.equals:(Ljava/lang/Object;)Z
+      19: ifeq          37
+      22: aload_2
+      23: aload_0
+      24: getfield      #75                 // Field selectedStack:Lnet/minecraft/item/ItemStack;
+      27: invokestatic  #432                // Method net/minecraft/item/ItemStack.areItemsAndComponentsEqual:(Lnet/minecraft/item/ItemStack;Lnet/minecraft/item/ItemStack;)Z
+      30: ifeq          37
+      33: iconst_1
+      34: goto          38
+      37: iconst_0
+      38: ireturn
+
+  private void syncSelectedSlot();
+    Code:
+       0: aload_0
+       1: getfield      #84                 // Field client:Lnet/minecraft/client/MinecraftClient;
+       4: getfield      #111                // Field net/minecraft/client/MinecraftClient.player:Lnet/minecraft/client/network/ClientPlayerEntity;
+       7: invokevirtual #437                // Method net/minecraft/client/network/ClientPlayerEntity.getInventory:()Lnet/minecraft/entity/player/PlayerInventory;
+      10: invokevirtual #442                // Method net/minecraft/entity/player/PlayerInventory.getSelectedSlot:()I
+      13: istore_1
+      14: iload_1
+      15: aload_0
+      16: getfield      #444                // Field lastSelectedSlot:I
+      19: if_icmpeq     45
+      22: aload_0
+      23: iload_1
+      24: putfield      #444                // Field lastSelectedSlot:I
+      27: aload_0
+      28: getfield      #86                 // Field networkHandler:Lnet/minecraft/client/network/ClientPlayNetworkHandler;
+      31: new           #446                // class net/minecraft/network/packet/c2s/play/UpdateSelectedSlotC2SPacket
+      34: dup
+      35: aload_0
+      36: getfield      #444                // Field lastSelectedSlot:I
+      39: invokespecial #449                // Method net/minecraft/network/packet/c2s/play/UpdateSelectedSlotC2SPacket."<init>":(I)V
+      42: invokevirtual #263                // Method net/minecraft/client/network/ClientPlayNetworkHandler.sendPacket:(Lnet/minecraft/network/packet/Packet;)V
+      45: return
+
+  public net.minecraft.util.ActionResult interactBlock(net.minecraft.client.network.ClientPlayerEntity, net.minecraft.util.Hand, net.minecraft.util.hit.BlockHitResult);
+    Code:
+       0: aload_0
+       1: invokevirtual #296                // Method syncSelectedSlot:()V
+       4: aload_0
+       5: getfield      #84                 // Field client:Lnet/minecraft/client/MinecraftClient;
+       8: getfield      #128                // Field net/minecraft/client/MinecraftClient.world:Lnet/minecraft/client/world/ClientWorld;
+      11: invokevirtual #200                // Method net/minecraft/client/world/ClientWorld.getWorldBorder:()Lnet/minecraft/world/border/WorldBorder;
+      14: aload_3
+      15: invokevirtual #459                // Method net/minecraft/util/hit/BlockHitResult.getBlockPos:()Lnet/minecraft/util/math/BlockPos;
+      18: invokevirtual #205                // Method net/minecraft/world/border/WorldBorder.contains:(Lnet/minecraft/util/math/BlockPos;)Z
+      21: ifne          28
+      24: getstatic     #463                // Field net/minecraft/util/ActionResult.FAIL:Lnet/minecraft/util/ActionResult$Fail;
+      27: areturn
+      28: new           #465                // class org/apache/commons/lang3/mutable/MutableObject
+      31: dup
+      32: invokespecial #466                // Method org/apache/commons/lang3/mutable/MutableObject."<init>":()V
+      35: astore        4
+      37: aload_0
+      38: aload_0
+      39: getfield      #84                 // Field client:Lnet/minecraft/client/MinecraftClient;
+      42: getfield      #128                // Field net/minecraft/client/MinecraftClient.world:Lnet/minecraft/client/world/ClientWorld;
+      45: aload_0
+      46: aload         4
+      48: aload_1
+      49: aload_2
+      50: aload_3
+      51: invokedynamic #474,  0            // InvokeDynamic #4:predict:(Lnet/minecraft/client/network/ClientPlayerInteractionManager;Lorg/apache/commons/lang3/mutable/MutableObject;Lnet/minecraft/client/network/ClientPlayerEntity;Lnet/minecraft/util/Hand;Lnet/minecraft/util/hit/BlockHitResult;)Lnet/minecraft/client/network/SequencedPacketCreator;
+      56: invokevirtual #243                // Method sendSequencedPacket:(Lnet/minecraft/client/world/ClientWorld;Lnet/minecraft/client/network/SequencedPacketCreator;)V
+      59: aload         4
+      61: invokevirtual #478                // Method org/apache/commons/lang3/mutable/MutableObject.getValue:()Ljava/lang/Object;
+      64: checkcast     #14                 // class net/minecraft/util/ActionResult
+      67: areturn
+
+  private net.minecraft.util.ActionResult interactBlockInternal(net.minecraft.client.network.ClientPlayerEntity, net.minecraft.util.Hand, net.minecraft.util.hit.BlockHitResult);
+    Code:
+       0: aload_3
+       1: invokevirtual #459                // Method net/minecraft/util/hit/BlockHitResult.getBlockPos:()Lnet/minecraft/util/math/BlockPos;
+       4: astore        4
+       6: aload_1
+       7: aload_2
+       8: invokevirtual #488                // Method net/minecraft/client/network/ClientPlayerEntity.getStackInHand:(Lnet/minecraft/util/Hand;)Lnet/minecraft/item/ItemStack;
+      11: astore        5
+      13: aload_0
+      14: getfield      #82                 // Field gameMode:Lnet/minecraft/world/GameMode;
+      17: getstatic     #491                // Field net/minecraft/world/GameMode.SPECTATOR:Lnet/minecraft/world/GameMode;
+      20: if_acmpne     27
+      23: getstatic     #495                // Field net/minecraft/util/ActionResult.CONSUME:Lnet/minecraft/util/ActionResult$Success;
+      26: areturn
+      27: aload_1
+      28: invokevirtual #142                // Method net/minecraft/client/network/ClientPlayerEntity.getMainHandStack:()Lnet/minecraft/item/ItemStack;
+      31: invokevirtual #498                // Method net/minecraft/item/ItemStack.isEmpty:()Z
+      34: ifeq          47
+      37: aload_1
+      38: invokevirtual #501                // Method net/minecraft/client/network/ClientPlayerEntity.getOffHandStack:()Lnet/minecraft/item/ItemStack;
+      41: invokevirtual #498                // Method net/minecraft/item/ItemStack.isEmpty:()Z
+      44: ifne          51
+      47: iconst_1
+      48: goto          52
+      51: iconst_0
+      52: istore        6
+      54: aload_1
+      55: invokevirtual #504                // Method net/minecraft/client/network/ClientPlayerEntity.shouldCancelInteraction:()Z
+      58: ifeq          70
+      61: iload         6
+      63: ifeq          70
+      66: iconst_1
+      67: goto          71
+      70: iconst_0
+      71: istore        7
+      73: iload         7
+      75: ifne          193
+      78: aload_0
+      79: getfield      #84                 // Field client:Lnet/minecraft/client/MinecraftClient;
+      82: getfield      #128                // Field net/minecraft/client/MinecraftClient.world:Lnet/minecraft/client/world/ClientWorld;
+      85: aload         4
+      87: invokevirtual #211                // Method net/minecraft/client/world/ClientWorld.getBlockState:(Lnet/minecraft/util/math/BlockPos;)Lnet/minecraft/block/BlockState;
+      90: astore        8
+      92: aload_0
+      93: getfield      #86                 // Field networkHandler:Lnet/minecraft/client/network/ClientPlayNetworkHandler;
+      96: aload         8
+      98: invokevirtual #154                // Method net/minecraft/block/BlockState.getBlock:()Lnet/minecraft/block/Block;
+     101: invokevirtual #508                // Method net/minecraft/block/Block.getRequiredFeatures:()Lnet/minecraft/resource/featuretoggle/FeatureSet;
+     104: invokevirtual #512                // Method net/minecraft/client/network/ClientPlayNetworkHandler.hasFeature:(Lnet/minecraft/resource/featuretoggle/FeatureSet;)Z
+     107: ifne          114
+     110: getstatic     #463                // Field net/minecraft/util/ActionResult.FAIL:Lnet/minecraft/util/ActionResult$Fail;
+     113: areturn
+     114: aload         8
+     116: aload_1
+     117: aload_2
+     118: invokevirtual #488                // Method net/minecraft/client/network/ClientPlayerEntity.getStackInHand:(Lnet/minecraft/util/Hand;)Lnet/minecraft/item/ItemStack;
+     121: aload_0
+     122: getfield      #84                 // Field client:Lnet/minecraft/client/MinecraftClient;
+     125: getfield      #128                // Field net/minecraft/client/MinecraftClient.world:Lnet/minecraft/client/world/ClientWorld;
+     128: aload_1
+     129: aload_2
+     130: aload_3
+     131: invokevirtual #518                // Method net/minecraft/block/BlockState.onUseWithItem:(Lnet/minecraft/item/ItemStack;Lnet/minecraft/world/World;Lnet/minecraft/entity/player/PlayerEntity;Lnet/minecraft/util/Hand;Lnet/minecraft/util/hit/BlockHitResult;)Lnet/minecraft/util/ActionResult;
+     134: astore        9
+     136: aload         9
+     138: invokeinterface #521,  1          // InterfaceMethod net/minecraft/util/ActionResult.isAccepted:()Z
+     143: ifeq          149
+     146: aload         9
+     148: areturn
+     149: aload         9
+     151: instanceof    #20                 // class net/minecraft/util/ActionResult$PassToDefaultBlockAction
+     154: ifeq          193
+     157: aload_2
+     158: getstatic     #524                // Field net/minecraft/util/Hand.MAIN_HAND:Lnet/minecraft/util/Hand;
+     161: if_acmpne     193
+     164: aload         8
+     166: aload_0
+     167: getfield      #84                 // Field client:Lnet/minecraft/client/MinecraftClient;
+     170: getfield      #128                // Field net/minecraft/client/MinecraftClient.world:Lnet/minecraft/client/world/ClientWorld;
+     173: aload_1
+     174: aload_3
+     175: invokevirtual #528                // Method net/minecraft/block/BlockState.onUse:(Lnet/minecraft/world/World;Lnet/minecraft/entity/player/PlayerEntity;Lnet/minecraft/util/hit/BlockHitResult;)Lnet/minecraft/util/ActionResult;
+     178: astore        10
+     180: aload         10
+     182: invokeinterface #521,  1          // InterfaceMethod net/minecraft/util/ActionResult.isAccepted:()Z
+     187: ifeq          193
+     190: aload         10
+     192: areturn
+     193: aload         5
+     195: invokevirtual #498                // Method net/minecraft/item/ItemStack.isEmpty:()Z
+     198: ifne          213
+     201: aload_1
+     202: invokevirtual #532                // Method net/minecraft/client/network/ClientPlayerEntity.getItemCooldownManager:()Lnet/minecraft/entity/player/ItemCooldownManager;
+     205: aload         5
+     207: invokevirtual #538                // Method net/minecraft/entity/player/ItemCooldownManager.isCoolingDown:(Lnet/minecraft/item/ItemStack;)Z
+     210: ifeq          217
+     213: getstatic     #542                // Field net/minecraft/util/ActionResult.PASS:Lnet/minecraft/util/ActionResult$Pass;
+     216: areturn
+     217: new           #544                // class net/minecraft/item/ItemUsageContext
+     220: dup
+     221: aload_1
+     222: aload_2
+     223: aload_3
+     224: invokespecial #547                // Method net/minecraft/item/ItemUsageContext."<init>":(Lnet/minecraft/entity/player/PlayerEntity;Lnet/minecraft/util/Hand;Lnet/minecraft/util/hit/BlockHitResult;)V
+     227: astore        9
+     229: aload_1
+     230: invokevirtual #550                // Method net/minecraft/client/network/ClientPlayerEntity.isInCreativeMode:()Z
+     233: ifeq          262
+     236: aload         5
+     238: invokevirtual #553                // Method net/minecraft/item/ItemStack.getCount:()I
+     241: istore        10
+     243: aload         5
+     245: aload         9
+     247: invokevirtual #557                // Method net/minecraft/item/ItemStack.useOnBlock:(Lnet/minecraft/item/ItemUsageContext;)Lnet/minecraft/util/ActionResult;
+     250: astore        8
+     252: aload         5
+     254: iload         10
+     256: invokevirtual #560                // Method net/minecraft/item/ItemStack.setCount:(I)V
+     259: goto          271
+     262: aload         5
+     264: aload         9
+     266: invokevirtual #557                // Method net/minecraft/item/ItemStack.useOnBlock:(Lnet/minecraft/item/ItemUsageContext;)Lnet/minecraft/util/ActionResult;
+     269: astore        8
+     271: aload         8
+     273: areturn
+
+  public net.minecraft.util.ActionResult interactItem(net.minecraft.entity.player.PlayerEntity, net.minecraft.util.Hand);
+    Code:
+       0: aload_0
+       1: getfield      #82                 // Field gameMode:Lnet/minecraft/world/GameMode;
+       4: getstatic     #491                // Field net/minecraft/world/GameMode.SPECTATOR:Lnet/minecraft/world/GameMode;
+       7: if_acmpne     14
+      10: getstatic     #542                // Field net/minecraft/util/ActionResult.PASS:Lnet/minecraft/util/ActionResult$Pass;
+      13: areturn
+      14: aload_0
+      15: invokevirtual #296                // Method syncSelectedSlot:()V
+      18: new           #465                // class org/apache/commons/lang3/mutable/MutableObject
+      21: dup
+      22: invokespecial #466                // Method org/apache/commons/lang3/mutable/MutableObject."<init>":()V
+      25: astore_3
+      26: aload_0
+      27: aload_0
+      28: getfield      #84                 // Field client:Lnet/minecraft/client/MinecraftClient;
+      31: getfield      #128                // Field net/minecraft/client/MinecraftClient.world:Lnet/minecraft/client/world/ClientWorld;
+      34: aload_0
+      35: aload_2
+      36: aload_1
+      37: aload_3
+      38: invokedynamic #578,  0            // InvokeDynamic #5:predict:(Lnet/minecraft/client/network/ClientPlayerInteractionManager;Lnet/minecraft/util/Hand;Lnet/minecraft/entity/player/PlayerEntity;Lorg/apache/commons/lang3/mutable/MutableObject;)Lnet/minecraft/client/network/SequencedPacketCreator;
+      43: invokevirtual #243                // Method sendSequencedPacket:(Lnet/minecraft/client/world/ClientWorld;Lnet/minecraft/client/network/SequencedPacketCreator;)V
+      46: aload_3
+      47: invokevirtual #478                // Method org/apache/commons/lang3/mutable/MutableObject.getValue:()Ljava/lang/Object;
+      50: checkcast     #14                 // class net/minecraft/util/ActionResult
+      53: areturn
+
+  public net.minecraft.client.network.ClientPlayerEntity createPlayer(net.minecraft.client.world.ClientWorld, net.minecraft.stat.StatHandler, net.minecraft.client.recipebook.ClientRecipeBook);
+    Code:
+       0: aload_0
+       1: aload_1
+       2: aload_2
+       3: aload_3
+       4: iconst_0
+       5: iconst_0
+       6: invokevirtual #585                // Method createPlayer:(Lnet/minecraft/client/world/ClientWorld;Lnet/minecraft/stat/StatHandler;Lnet/minecraft/client/recipebook/ClientRecipeBook;ZZ)Lnet/minecraft/client/network/ClientPlayerEntity;
+       9: areturn
+
+  public net.minecraft.client.network.ClientPlayerEntity createPlayer(net.minecraft.client.world.ClientWorld, net.minecraft.stat.StatHandler, net.minecraft.client.recipebook.ClientRecipeBook, boolean, boolean);
+    Code:
+       0: new           #113                // class net/minecraft/client/network/ClientPlayerEntity
+       3: dup
+       4: aload_0
+       5: getfield      #84                 // Field client:Lnet/minecraft/client/MinecraftClient;
+       8: aload_1
+       9: aload_0
+      10: getfield      #86                 // Field networkHandler:Lnet/minecraft/client/network/ClientPlayNetworkHandler;
+      13: aload_2
+      14: aload_3
+      15: iload         4
+      17: iload         5
+      19: invokespecial #592                // Method net/minecraft/client/network/ClientPlayerEntity."<init>":(Lnet/minecraft/client/MinecraftClient;Lnet/minecraft/client/world/ClientWorld;Lnet/minecraft/client/network/ClientPlayNetworkHandler;Lnet/minecraft/stat/StatHandler;Lnet/minecraft/client/recipebook/ClientRecipeBook;ZZ)V
+      22: areturn
+
+  public void attackEntity(net.minecraft.entity.player.PlayerEntity, net.minecraft.entity.Entity);
+    Code:
+       0: aload_0
+       1: invokevirtual #296                // Method syncSelectedSlot:()V
+       4: aload_0
+       5: getfield      #86                 // Field networkHandler:Lnet/minecraft/client/network/ClientPlayNetworkHandler;
+       8: aload_2
+       9: aload_1
+      10: invokevirtual #598                // Method net/minecraft/entity/player/PlayerEntity.isSneaking:()Z
+      13: invokestatic  #604                // Method net/minecraft/network/packet/c2s/play/PlayerInteractEntityC2SPacket.attack:(Lnet/minecraft/entity/Entity;Z)Lnet/minecraft/network/packet/c2s/play/PlayerInteractEntityC2SPacket;
+      16: invokevirtual #263                // Method net/minecraft/client/network/ClientPlayNetworkHandler.sendPacket:(Lnet/minecraft/network/packet/Packet;)V
+      19: aload_0
+      20: getfield      #82                 // Field gameMode:Lnet/minecraft/world/GameMode;
+      23: getstatic     #491                // Field net/minecraft/world/GameMode.SPECTATOR:Lnet/minecraft/world/GameMode;
+      26: if_acmpeq     38
+      29: aload_1
+      30: aload_2
+      31: invokevirtual #607                // Method net/minecraft/entity/player/PlayerEntity.attack:(Lnet/minecraft/entity/Entity;)V
+      34: aload_1
+      35: invokevirtual #608                // Method net/minecraft/entity/player/PlayerEntity.resetLastAttackedTicks:()V
+      38: return
+
+  public net.minecraft.util.ActionResult interactEntity(net.minecraft.entity.player.PlayerEntity, net.minecraft.entity.Entity, net.minecraft.util.Hand);
+    Code:
+       0: aload_0
+       1: invokevirtual #296                // Method syncSelectedSlot:()V
+       4: aload_0
+       5: getfield      #86                 // Field networkHandler:Lnet/minecraft/client/network/ClientPlayNetworkHandler;
+       8: aload_2
+       9: aload_1
+      10: invokevirtual #598                // Method net/minecraft/entity/player/PlayerEntity.isSneaking:()Z
+      13: aload_3
+      14: invokestatic  #616                // Method net/minecraft/network/packet/c2s/play/PlayerInteractEntityC2SPacket.interact:(Lnet/minecraft/entity/Entity;ZLnet/minecraft/util/Hand;)Lnet/minecraft/network/packet/c2s/play/PlayerInteractEntityC2SPacket;
+      17: invokevirtual #263                // Method net/minecraft/client/network/ClientPlayNetworkHandler.sendPacket:(Lnet/minecraft/network/packet/Packet;)V
+      20: aload_0
+      21: getfield      #82                 // Field gameMode:Lnet/minecraft/world/GameMode;
+      24: getstatic     #491                // Field net/minecraft/world/GameMode.SPECTATOR:Lnet/minecraft/world/GameMode;
+      27: if_acmpne     34
+      30: getstatic     #542                // Field net/minecraft/util/ActionResult.PASS:Lnet/minecraft/util/ActionResult$Pass;
+      33: areturn
+      34: aload_1
+      35: aload_2
+      36: aload_3
+      37: invokevirtual #621                // Method net/minecraft/entity/player/PlayerEntity.interact:(Lnet/minecraft/entity/Entity;Lnet/minecraft/util/Hand;)Lnet/minecraft/util/ActionResult;
+      40: areturn
+
+  public net.minecraft.util.ActionResult interactEntityAtLocation(net.minecraft.entity.player.PlayerEntity, net.minecraft.entity.Entity, net.minecraft.util.hit.EntityHitResult, net.minecraft.util.Hand);
+    Code:
+       0: aload_0
+       1: invokevirtual #296                // Method syncSelectedSlot:()V
+       4: aload_3
+       5: invokevirtual #629                // Method net/minecraft/util/hit/EntityHitResult.getPos:()Lnet/minecraft/util/math/Vec3d;
+       8: aload_2
+       9: invokevirtual #633                // Method net/minecraft/entity/Entity.getX:()D
+      12: aload_2
+      13: invokevirtual #636                // Method net/minecraft/entity/Entity.getY:()D
+      16: aload_2
+      17: invokevirtual #639                // Method net/minecraft/entity/Entity.getZ:()D
+      20: invokevirtual #645                // Method net/minecraft/util/math/Vec3d.subtract:(DDD)Lnet/minecraft/util/math/Vec3d;
+      23: astore        5
+      25: aload_0
+      26: getfield      #86                 // Field networkHandler:Lnet/minecraft/client/network/ClientPlayNetworkHandler;
+      29: aload_2
+      30: aload_1
+      31: invokevirtual #598                // Method net/minecraft/entity/player/PlayerEntity.isSneaking:()Z
+      34: aload         4
+      36: aload         5
+      38: invokestatic  #649                // Method net/minecraft/network/packet/c2s/play/PlayerInteractEntityC2SPacket.interactAt:(Lnet/minecraft/entity/Entity;ZLnet/minecraft/util/Hand;Lnet/minecraft/util/math/Vec3d;)Lnet/minecraft/network/packet/c2s/play/PlayerInteractEntityC2SPacket;
+      41: invokevirtual #263                // Method net/minecraft/client/network/ClientPlayNetworkHandler.sendPacket:(Lnet/minecraft/network/packet/Packet;)V
+      44: aload_0
+      45: getfield      #82                 // Field gameMode:Lnet/minecraft/world/GameMode;
+      48: getstatic     #491                // Field net/minecraft/world/GameMode.SPECTATOR:Lnet/minecraft/world/GameMode;
+      51: if_acmpne     58
+      54: getstatic     #542                // Field net/minecraft/util/ActionResult.PASS:Lnet/minecraft/util/ActionResult$Pass;
+      57: areturn
+      58: aload_2
+      59: aload_1
+      60: aload         5
+      62: aload         4
+      64: invokevirtual #652                // Method net/minecraft/entity/Entity.interactAt:(Lnet/minecraft/entity/player/PlayerEntity;Lnet/minecraft/util/math/Vec3d;Lnet/minecraft/util/Hand;)Lnet/minecraft/util/ActionResult;
+      67: areturn
+
+  public void clickSlot(int, int, int, net.minecraft.screen.slot.SlotActionType, net.minecraft.entity.player.PlayerEntity);
+    Code:
+       0: aload         5
+       2: getfield      #665                // Field net/minecraft/entity/player/PlayerEntity.currentScreenHandler:Lnet/minecraft/screen/ScreenHandler;
+       5: astore        6
+       7: iload_1
+       8: aload         6
+      10: getfield      #669                // Field net/minecraft/screen/ScreenHandler.syncId:I
+      13: if_icmpeq     40
+      16: getstatic     #671                // Field LOGGER:Lorg/slf4j/Logger;
+      19: ldc_w         #673                // String Ignoring click in mismatching container. Click in {}, player has {}.
+      22: iload_1
+      23: invokestatic  #679                // Method java/lang/Integer.valueOf:(I)Ljava/lang/Integer;
+      26: aload         6
+      28: getfield      #669                // Field net/minecraft/screen/ScreenHandler.syncId:I
+      31: invokestatic  #679                // Method java/lang/Integer.valueOf:(I)Ljava/lang/Integer;
+      34: invokeinterface #685,  4          // InterfaceMethod org/slf4j/Logger.warn:(Ljava/lang/String;Ljava/lang/Object;Ljava/lang/Object;)V
+      39: return
+      40: aload         6
+      42: getfield      #689                // Field net/minecraft/screen/ScreenHandler.slots:Lnet/minecraft/util/collection/DefaultedList;
+      45: astore        7
+      47: aload         7
+      49: invokevirtual #694                // Method net/minecraft/util/collection/DefaultedList.size:()I
+      52: istore        8
+      54: iload         8
+      56: invokestatic  #700                // Method com/google/common/collect/Lists.newArrayListWithCapacity:(I)Ljava/util/ArrayList;
+      59: astore        9
+      61: aload         7
+      63: invokevirtual #704                // Method net/minecraft/util/collection/DefaultedList.iterator:()Ljava/util/Iterator;
+      66: astore        10
+      68: aload         10
+      70: invokeinterface #713,  1          // InterfaceMethod java/util/Iterator.hasNext:()Z
+      75: ifeq          109
+      78: aload         10
+      80: invokeinterface #716,  1          // InterfaceMethod java/util/Iterator.next:()Ljava/lang/Object;
+      85: checkcast     #718                // class net/minecraft/screen/slot/Slot
+      88: astore        11
+      90: aload         9
+      92: aload         11
+      94: invokevirtual #721                // Method net/minecraft/screen/slot/Slot.getStack:()Lnet/minecraft/item/ItemStack;
+      97: invokevirtual #724                // Method net/minecraft/item/ItemStack.copy:()Lnet/minecraft/item/ItemStack;
+     100: invokeinterface #729,  2          // InterfaceMethod java/util/List.add:(Ljava/lang/Object;)Z
+     105: pop
+     106: goto          68
+     109: aload         6
+     111: iload_2
+     112: iload_3
+     113: aload         4
+     115: aload         5
+     117: invokevirtual #733                // Method net/minecraft/screen/ScreenHandler.onSlotClick:(IILnet/minecraft/screen/slot/SlotActionType;Lnet/minecraft/entity/player/PlayerEntity;)V
+     120: new           #735                // class it/unimi/dsi/fastutil/ints/Int2ObjectOpenHashMap
+     123: dup
+     124: invokespecial #736                // Method it/unimi/dsi/fastutil/ints/Int2ObjectOpenHashMap."<init>":()V
+     127: astore        10
+     129: iconst_0
+     130: istore        11
+     132: iload         11
+     134: iload         8
+     136: if_icmpge     206
+     139: aload         9
+     141: iload         11
+     143: invokeinterface #740,  2          // InterfaceMethod java/util/List.get:(I)Ljava/lang/Object;
+     148: checkcast     #70                 // class net/minecraft/item/ItemStack
+     151: astore        12
+     153: aload         7
+     155: iload         11
+     157: invokevirtual #741                // Method net/minecraft/util/collection/DefaultedList.get:(I)Ljava/lang/Object;
+     160: checkcast     #718                // class net/minecraft/screen/slot/Slot
+     163: invokevirtual #721                // Method net/minecraft/screen/slot/Slot.getStack:()Lnet/minecraft/item/ItemStack;
+     166: astore        13
+     168: aload         12
+     170: aload         13
+     172: invokestatic  #744                // Method net/minecraft/item/ItemStack.areEqual:(Lnet/minecraft/item/ItemStack;Lnet/minecraft/item/ItemStack;)Z
+     175: ifne          200
+     178: aload         10
+     180: iload         11
+     182: aload         13
+     184: aload_0
+     185: getfield      #86                 // Field networkHandler:Lnet/minecraft/client/network/ClientPlayNetworkHandler;
+     188: invokevirtual #748                // Method net/minecraft/client/network/ClientPlayNetworkHandler.method_68823:()Lnet/minecraft/screen/sync/ComponentChangesHash$ComponentHasher;
+     191: invokestatic  #754                // InterfaceMethod net/minecraft/screen/sync/ItemStackHash.fromItemStack:(Lnet/minecraft/item/ItemStack;Lnet/minecraft/screen/sync/ComponentChangesHash$ComponentHasher;)Lnet/minecraft/screen/sync/ItemStackHash;
+     194: invokeinterface #760,  3          // InterfaceMethod it/unimi/dsi/fastutil/ints/Int2ObjectMap.put:(ILjava/lang/Object;)Ljava/lang/Object;
+     199: pop
+     200: iinc          11, 1
+     203: goto          132
+     206: aload         6
+     208: invokevirtual #763                // Method net/minecraft/screen/ScreenHandler.getCursorStack:()Lnet/minecraft/item/ItemStack;
+     211: aload_0
+     212: getfield      #86                 // Field networkHandler:Lnet/minecraft/client/network/ClientPlayNetworkHandler;
+     215: invokevirtual #748                // Method net/minecraft/client/network/ClientPlayNetworkHandler.method_68823:()Lnet/minecraft/screen/sync/ComponentChangesHash$ComponentHasher;
+     218: invokestatic  #754                // InterfaceMethod net/minecraft/screen/sync/ItemStackHash.fromItemStack:(Lnet/minecraft/item/ItemStack;Lnet/minecraft/screen/sync/ComponentChangesHash$ComponentHasher;)Lnet/minecraft/screen/sync/ItemStackHash;
+     221: astore        11
+     223: aload_0
+     224: getfield      #86                 // Field networkHandler:Lnet/minecraft/client/network/ClientPlayNetworkHandler;
+     227: new           #765                // class net/minecraft/network/packet/c2s/play/ClickSlotC2SPacket
+     230: dup
+     231: iload_1
+     232: aload         6
+     234: invokevirtual #768                // Method net/minecraft/screen/ScreenHandler.getRevision:()I
+     237: iload_2
+     238: i2l
+     239: invokestatic  #774                // Method com/google/common/primitives/Shorts.checkedCast:(J)S
+     242: iload_3
+     243: i2l
+     244: invokestatic  #779                // Method com/google/common/primitives/SignedBytes.checkedCast:(J)B
+     247: aload         4
+     249: aload         10
+     251: aload         11
+     253: invokespecial #782                // Method net/minecraft/network/packet/c2s/play/ClickSlotC2SPacket."<init>":(IISBLnet/minecraft/screen/slot/SlotActionType;Lit/unimi/dsi/fastutil/ints/Int2ObjectMap;Lnet/minecraft/screen/sync/ItemStackHash;)V
+     256: invokevirtual #263                // Method net/minecraft/client/network/ClientPlayNetworkHandler.sendPacket:(Lnet/minecraft/network/packet/Packet;)V
+     259: return
+
+  public void clickRecipe(int, net.minecraft.recipe.NetworkRecipeId, boolean);
+    Code:
+       0: aload_0
+       1: getfield      #86                 // Field networkHandler:Lnet/minecraft/client/network/ClientPlayNetworkHandler;
+       4: new           #804                // class net/minecraft/network/packet/c2s/play/CraftRequestC2SPacket
+       7: dup
+       8: iload_1
+       9: aload_2
+      10: iload_3
+      11: invokespecial #806                // Method net/minecraft/network/packet/c2s/play/CraftRequestC2SPacket."<init>":(ILnet/minecraft/recipe/NetworkRecipeId;Z)V
+      14: invokevirtual #263                // Method net/minecraft/client/network/ClientPlayNetworkHandler.sendPacket:(Lnet/minecraft/network/packet/Packet;)V
+      17: return
+
+  public void clickButton(int, int);
+    Code:
+       0: aload_0
+       1: getfield      #86                 // Field networkHandler:Lnet/minecraft/client/network/ClientPlayNetworkHandler;
+       4: new           #812                // class net/minecraft/network/packet/c2s/play/ButtonClickC2SPacket
+       7: dup
+       8: iload_1
+       9: iload_2
+      10: invokespecial #814                // Method net/minecraft/network/packet/c2s/play/ButtonClickC2SPacket."<init>":(II)V
+      13: invokevirtual #263                // Method net/minecraft/client/network/ClientPlayNetworkHandler.sendPacket:(Lnet/minecraft/network/packet/Packet;)V
+      16: return
+
+  public void clickCreativeStack(net.minecraft.item.ItemStack, int);
+    Code:
+       0: aload_0
+       1: getfield      #84                 // Field client:Lnet/minecraft/client/MinecraftClient;
+       4: getfield      #111                // Field net/minecraft/client/MinecraftClient.player:Lnet/minecraft/client/network/ClientPlayerEntity;
+       7: invokevirtual #550                // Method net/minecraft/client/network/ClientPlayerEntity.isInCreativeMode:()Z
+      10: ifeq          46
+      13: aload_0
+      14: getfield      #86                 // Field networkHandler:Lnet/minecraft/client/network/ClientPlayNetworkHandler;
+      17: aload_1
+      18: invokevirtual #821                // Method net/minecraft/item/ItemStack.getItem:()Lnet/minecraft/item/Item;
+      21: invokevirtual #824                // Method net/minecraft/item/Item.getRequiredFeatures:()Lnet/minecraft/resource/featuretoggle/FeatureSet;
+      24: invokevirtual #512                // Method net/minecraft/client/network/ClientPlayNetworkHandler.hasFeature:(Lnet/minecraft/resource/featuretoggle/FeatureSet;)Z
+      27: ifeq          46
+      30: aload_0
+      31: getfield      #86                 // Field networkHandler:Lnet/minecraft/client/network/ClientPlayNetworkHandler;
+      34: new           #826                // class net/minecraft/network/packet/c2s/play/CreativeInventoryActionC2SPacket
+      37: dup
+      38: iload_2
+      39: aload_1
+      40: invokespecial #829                // Method net/minecraft/network/packet/c2s/play/CreativeInventoryActionC2SPacket."<init>":(ILnet/minecraft/item/ItemStack;)V
+      43: invokevirtual #263                // Method net/minecraft/client/network/ClientPlayNetworkHandler.sendPacket:(Lnet/minecraft/network/packet/Packet;)V
+      46: return
+
+  public void dropCreativeStack(net.minecraft.item.ItemStack);
+    Code:
+       0: aload_0
+       1: getfield      #84                 // Field client:Lnet/minecraft/client/MinecraftClient;
+       4: getfield      #835                // Field net/minecraft/client/MinecraftClient.currentScreen:Lnet/minecraft/client/gui/screen/Screen;
+       7: instanceof    #837                // class net/minecraft/client/gui/screen/ingame/HandledScreen
+      10: ifeq          30
+      13: aload_0
+      14: getfield      #84                 // Field client:Lnet/minecraft/client/MinecraftClient;
+      17: getfield      #835                // Field net/minecraft/client/MinecraftClient.currentScreen:Lnet/minecraft/client/gui/screen/Screen;
+      20: instanceof    #839                // class net/minecraft/client/gui/screen/ingame/CreativeInventoryScreen
+      23: ifne          30
+      26: iconst_1
+      27: goto          31
+      30: iconst_0
+      31: istore_2
+      32: aload_0
+      33: getfield      #84                 // Field client:Lnet/minecraft/client/MinecraftClient;
+      36: getfield      #111                // Field net/minecraft/client/MinecraftClient.player:Lnet/minecraft/client/network/ClientPlayerEntity;
+      39: invokevirtual #550                // Method net/minecraft/client/network/ClientPlayerEntity.isInCreativeMode:()Z
+      42: ifeq          102
+      45: iload_2
+      46: ifne          102
+      49: aload_1
+      50: invokevirtual #498                // Method net/minecraft/item/ItemStack.isEmpty:()Z
+      53: ifne          102
+      56: aload_0
+      57: getfield      #86                 // Field networkHandler:Lnet/minecraft/client/network/ClientPlayNetworkHandler;
+      60: aload_1
+      61: invokevirtual #821                // Method net/minecraft/item/ItemStack.getItem:()Lnet/minecraft/item/Item;
+      64: invokevirtual #824                // Method net/minecraft/item/Item.getRequiredFeatures:()Lnet/minecraft/resource/featuretoggle/FeatureSet;
+      67: invokevirtual #512                // Method net/minecraft/client/network/ClientPlayNetworkHandler.hasFeature:(Lnet/minecraft/resource/featuretoggle/FeatureSet;)Z
+      70: ifeq          102
+      73: aload_0
+      74: getfield      #86                 // Field networkHandler:Lnet/minecraft/client/network/ClientPlayNetworkHandler;
+      77: new           #826                // class net/minecraft/network/packet/c2s/play/CreativeInventoryActionC2SPacket
+      80: dup
+      81: iconst_m1
+      82: aload_1
+      83: invokespecial #829                // Method net/minecraft/network/packet/c2s/play/CreativeInventoryActionC2SPacket."<init>":(ILnet/minecraft/item/ItemStack;)V
+      86: invokevirtual #263                // Method net/minecraft/client/network/ClientPlayNetworkHandler.sendPacket:(Lnet/minecraft/network/packet/Packet;)V
+      89: aload_0
+      90: getfield      #84                 // Field client:Lnet/minecraft/client/MinecraftClient;
+      93: getfield      #111                // Field net/minecraft/client/MinecraftClient.player:Lnet/minecraft/client/network/ClientPlayerEntity;
+      96: invokevirtual #843                // Method net/minecraft/client/network/ClientPlayerEntity.getItemDropCooldown:()Lnet/minecraft/util/Cooldown;
+      99: invokevirtual #848                // Method net/minecraft/util/Cooldown.increment:()V
+     102: return
+
+  public void stopUsingItem(net.minecraft.entity.player.PlayerEntity);
+    Code:
+       0: aload_0
+       1: invokevirtual #296                // Method syncSelectedSlot:()V
+       4: aload_0
+       5: getfield      #86                 // Field networkHandler:Lnet/minecraft/client/network/ClientPlayNetworkHandler;
+       8: new           #9                  // class net/minecraft/network/packet/c2s/play/PlayerActionC2SPacket
+      11: dup
+      12: getstatic     #852                // Field net/minecraft/network/packet/c2s/play/PlayerActionC2SPacket$Action.RELEASE_USE_ITEM:Lnet/minecraft/network/packet/c2s/play/PlayerActionC2SPacket$Action;
+      15: getstatic     #855                // Field net/minecraft/util/math/BlockPos.ORIGIN:Lnet/minecraft/util/math/BlockPos;
+      18: getstatic     #279                // Field net/minecraft/util/math/Direction.DOWN:Lnet/minecraft/util/math/Direction;
+      21: invokespecial #257                // Method net/minecraft/network/packet/c2s/play/PlayerActionC2SPacket."<init>":(Lnet/minecraft/network/packet/c2s/play/PlayerActionC2SPacket$Action;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/util/math/Direction;)V
+      24: invokevirtual #263                // Method net/minecraft/client/network/ClientPlayNetworkHandler.sendPacket:(Lnet/minecraft/network/packet/Packet;)V
+      27: aload_1
+      28: invokevirtual #857                // Method net/minecraft/entity/player/PlayerEntity.stopUsingItem:()V
+      31: return
+
+  public boolean hasExperienceBar();
+    Code:
+       0: aload_0
+       1: getfield      #82                 // Field gameMode:Lnet/minecraft/world/GameMode;
+       4: invokevirtual #121                // Method net/minecraft/world/GameMode.isSurvivalLike:()Z
+       7: ireturn
+
+  public boolean hasLimitedAttackSpeed();
+    Code:
+       0: aload_0
+       1: getfield      #82                 // Field gameMode:Lnet/minecraft/world/GameMode;
+       4: invokevirtual #862                // Method net/minecraft/world/GameMode.isCreative:()Z
+       7: ifne          14
+      10: iconst_1
+      11: goto          15
+      14: iconst_0
+      15: ireturn
+
+  public boolean hasRidingInventory();
+    Code:
+       0: aload_0
+       1: getfield      #84                 // Field client:Lnet/minecraft/client/MinecraftClient;
+       4: getfield      #111                // Field net/minecraft/client/MinecraftClient.player:Lnet/minecraft/client/network/ClientPlayerEntity;
+       7: invokevirtual #866                // Method net/minecraft/client/network/ClientPlayerEntity.hasVehicle:()Z
+      10: ifeq          33
+      13: aload_0
+      14: getfield      #84                 // Field client:Lnet/minecraft/client/MinecraftClient;
+      17: getfield      #111                // Field net/minecraft/client/MinecraftClient.player:Lnet/minecraft/client/network/ClientPlayerEntity;
+      20: invokevirtual #870                // Method net/minecraft/client/network/ClientPlayerEntity.getVehicle:()Lnet/minecraft/entity/Entity;
+      23: instanceof    #872                // class net/minecraft/entity/RideableInventory
+      26: ifeq          33
+      29: iconst_1
+      30: goto          34
+      33: iconst_0
+      34: ireturn
+
+  public boolean isFlyingLocked();
+    Code:
+       0: aload_0
+       1: getfield      #82                 // Field gameMode:Lnet/minecraft/world/GameMode;
+       4: getstatic     #491                // Field net/minecraft/world/GameMode.SPECTATOR:Lnet/minecraft/world/GameMode;
+       7: if_acmpne     14
+      10: iconst_1
+      11: goto          15
+      14: iconst_0
+      15: ireturn
+
+  public net.minecraft.world.GameMode getPreviousGameMode();
+    Code:
+       0: aload_0
+       1: getfield      #106                // Field previousGameMode:Lnet/minecraft/world/GameMode;
+       4: areturn
+
+  public net.minecraft.world.GameMode getCurrentGameMode();
+    Code:
+       0: aload_0
+       1: getfield      #82                 // Field gameMode:Lnet/minecraft/world/GameMode;
+       4: areturn
+
+  public boolean isBreakingBlock();
+    Code:
+       0: aload_0
+       1: getfield      #247                // Field breakingBlock:Z
+       4: ireturn
+
+  public int getBlockBreakingProgress();
+    Code:
+       0: aload_0
+       1: getfield      #281                // Field currentBreakingProgress:F
+       4: fconst_0
+       5: fcmpl
+       6: ifle          21
+       9: aload_0
+      10: getfield      #281                // Field currentBreakingProgress:F
+      13: ldc_w         #878                // float 10.0f
+      16: fmul
+      17: f2i
+      18: goto          22
+      21: iconst_m1
+      22: ireturn
+
+  public void pickItemFromBlock(net.minecraft.util.math.BlockPos, boolean);
+    Code:
+       0: aload_0
+       1: getfield      #86                 // Field networkHandler:Lnet/minecraft/client/network/ClientPlayNetworkHandler;
+       4: new           #883                // class net/minecraft/network/packet/c2s/play/PickItemFromBlockC2SPacket
+       7: dup
+       8: aload_1
+       9: iload_2
+      10: invokespecial #885                // Method net/minecraft/network/packet/c2s/play/PickItemFromBlockC2SPacket."<init>":(Lnet/minecraft/util/math/BlockPos;Z)V
+      13: invokevirtual #263                // Method net/minecraft/client/network/ClientPlayNetworkHandler.sendPacket:(Lnet/minecraft/network/packet/Packet;)V
+      16: return
+
+  public void pickItemFromEntity(net.minecraft.entity.Entity, boolean);
+    Code:
+       0: aload_0
+       1: getfield      #86                 // Field networkHandler:Lnet/minecraft/client/network/ClientPlayNetworkHandler;
+       4: new           #889                // class net/minecraft/network/packet/c2s/play/PickItemFromEntityC2SPacket
+       7: dup
+       8: aload_1
+       9: invokevirtual #890                // Method net/minecraft/entity/Entity.getId:()I
+      12: iload_2
+      13: invokespecial #893                // Method net/minecraft/network/packet/c2s/play/PickItemFromEntityC2SPacket."<init>":(IZ)V
+      16: invokevirtual #263                // Method net/minecraft/client/network/ClientPlayNetworkHandler.sendPacket:(Lnet/minecraft/network/packet/Packet;)V
+      19: return
+
+  public void slotChangedState(int, int, boolean);
+    Code:
+       0: aload_0
+       1: getfield      #86                 // Field networkHandler:Lnet/minecraft/client/network/ClientPlayNetworkHandler;
+       4: new           #899                // class net/minecraft/network/packet/c2s/play/SlotChangedStateC2SPacket
+       7: dup
+       8: iload_1
+       9: iload_2
+      10: iload_3
+      11: invokespecial #901                // Method net/minecraft/network/packet/c2s/play/SlotChangedStateC2SPacket."<init>":(IIZ)V
+      14: invokevirtual #263                // Method net/minecraft/client/network/ClientPlayNetworkHandler.sendPacket:(Lnet/minecraft/network/packet/Packet;)V
+      17: return
+
+  private net.minecraft.network.packet.Packet method_41929(net.minecraft.util.Hand, net.minecraft.entity.player.PlayerEntity, org.apache.commons.lang3.mutable.MutableObject, int);
+    Code:
+       0: new           #905                // class net/minecraft/network/packet/c2s/play/PlayerInteractItemC2SPacket
+       3: dup
+       4: aload_1
+       5: iload         4
+       7: aload_2
+       8: invokevirtual #908                // Method net/minecraft/entity/player/PlayerEntity.getYaw:()F
+      11: aload_2
+      12: invokevirtual #909                // Method net/minecraft/entity/player/PlayerEntity.getPitch:()F
+      15: invokespecial #912                // Method net/minecraft/network/packet/c2s/play/PlayerInteractItemC2SPacket."<init>":(Lnet/minecraft/util/Hand;IFF)V
+      18: astore        5
+      20: aload_2
+      21: aload_1
+      22: invokevirtual #913                // Method net/minecraft/entity/player/PlayerEntity.getStackInHand:(Lnet/minecraft/util/Hand;)Lnet/minecraft/item/ItemStack;
+      25: astore        6
+      27: aload_2
+      28: invokevirtual #914                // Method net/minecraft/entity/player/PlayerEntity.getItemCooldownManager:()Lnet/minecraft/entity/player/ItemCooldownManager;
+      31: aload         6
+      33: invokevirtual #538                // Method net/minecraft/entity/player/ItemCooldownManager.isCoolingDown:(Lnet/minecraft/item/ItemStack;)Z
+      36: ifeq          49
+      39: aload_3
+      40: getstatic     #542                // Field net/minecraft/util/ActionResult.PASS:Lnet/minecraft/util/ActionResult$Pass;
+      43: invokevirtual #918                // Method org/apache/commons/lang3/mutable/MutableObject.setValue:(Ljava/lang/Object;)V
+      46: aload         5
+      48: areturn
+      49: aload         6
+      51: aload_0
+      52: getfield      #84                 // Field client:Lnet/minecraft/client/MinecraftClient;
+      55: getfield      #128                // Field net/minecraft/client/MinecraftClient.world:Lnet/minecraft/client/world/ClientWorld;
+      58: aload_2
+      59: aload_1
+      60: invokevirtual #922                // Method net/minecraft/item/ItemStack.use:(Lnet/minecraft/world/World;Lnet/minecraft/entity/player/PlayerEntity;Lnet/minecraft/util/Hand;)Lnet/minecraft/util/ActionResult;
+      63: astore        7
+      65: aload         7
+      67: instanceof    #17                 // class net/minecraft/util/ActionResult$Success
+      70: ifeq          103
+      73: aload         7
+      75: checkcast     #17                 // class net/minecraft/util/ActionResult$Success
+      78: astore        9
+      80: aload         9
+      82: invokevirtual #925                // Method net/minecraft/util/ActionResult$Success.getNewHandStack:()Lnet/minecraft/item/ItemStack;
+      85: aload_2
+      86: aload_1
+      87: invokedynamic #935,  0            // InvokeDynamic #6:get:(Lnet/minecraft/entity/player/PlayerEntity;Lnet/minecraft/util/Hand;)Ljava/util/function/Supplier;
+      92: invokestatic  #941                // Method java/util/Objects.requireNonNullElseGet:(Ljava/lang/Object;Ljava/util/function/Supplier;)Ljava/lang/Object;
+      95: checkcast     #70                 // class net/minecraft/item/ItemStack
+      98: astore        8
+     100: goto          110
+     103: aload_2
+     104: aload_1
+     105: invokevirtual #913                // Method net/minecraft/entity/player/PlayerEntity.getStackInHand:(Lnet/minecraft/util/Hand;)Lnet/minecraft/item/ItemStack;
+     108: astore        8
+     110: aload         8
+     112: aload         6
+     114: if_acmpeq     124
+     117: aload_2
+     118: aload_1
+     119: aload         8
+     121: invokevirtual #945                // Method net/minecraft/entity/player/PlayerEntity.setStackInHand:(Lnet/minecraft/util/Hand;Lnet/minecraft/item/ItemStack;)V
+     124: aload_3
+     125: aload         7
+     127: invokevirtual #918                // Method org/apache/commons/lang3/mutable/MutableObject.setValue:(Ljava/lang/Object;)V
+     130: aload         5
+     132: areturn
+
+  private static net.minecraft.item.ItemStack method_62152(net.minecraft.entity.player.PlayerEntity, net.minecraft.util.Hand);
+    Code:
+       0: aload_0
+       1: aload_1
+       2: invokevirtual #913                // Method net/minecraft/entity/player/PlayerEntity.getStackInHand:(Lnet/minecraft/util/Hand;)Lnet/minecraft/item/ItemStack;
+       5: areturn
+
+  private net.minecraft.network.packet.Packet method_41933(org.apache.commons.lang3.mutable.MutableObject, net.minecraft.client.network.ClientPlayerEntity, net.minecraft.util.Hand, net.minecraft.util.hit.BlockHitResult, int);
+    Code:
+       0: aload_1
+       1: aload_0
+       2: aload_2
+       3: aload_3
+       4: aload         4
+       6: invokevirtual #952                // Method interactBlockInternal:(Lnet/minecraft/client/network/ClientPlayerEntity;Lnet/minecraft/util/Hand;Lnet/minecraft/util/hit/BlockHitResult;)Lnet/minecraft/util/ActionResult;
+       9: invokevirtual #918                // Method org/apache/commons/lang3/mutable/MutableObject.setValue:(Ljava/lang/Object;)V
+      12: new           #954                // class net/minecraft/network/packet/c2s/play/PlayerInteractBlockC2SPacket
+      15: dup
+      16: aload_3
+      17: aload         4
+      19: iload         5
+      21: invokespecial #957                // Method net/minecraft/network/packet/c2s/play/PlayerInteractBlockC2SPacket."<init>":(Lnet/minecraft/util/Hand;Lnet/minecraft/util/hit/BlockHitResult;I)V
+      24: areturn
+
+  private net.minecraft.network.packet.Packet method_41932(net.minecraft.util.math.BlockPos, net.minecraft.util.math.Direction, int);
+    Code:
+       0: aload_0
+       1: aload_1
+       2: invokevirtual #959                // Method breakBlock:(Lnet/minecraft/util/math/BlockPos;)Z
+       5: pop
+       6: new           #9                  // class net/minecraft/network/packet/c2s/play/PlayerActionC2SPacket
+       9: dup
+      10: getstatic     #962                // Field net/minecraft/network/packet/c2s/play/PlayerActionC2SPacket$Action.STOP_DESTROY_BLOCK:Lnet/minecraft/network/packet/c2s/play/PlayerActionC2SPacket$Action;
+      13: aload_1
+      14: aload_2
+      15: iload_3
+      16: invokespecial #965                // Method net/minecraft/network/packet/c2s/play/PlayerActionC2SPacket."<init>":(Lnet/minecraft/network/packet/c2s/play/PlayerActionC2SPacket$Action;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/util/math/Direction;I)V
+      19: areturn
+
+  private net.minecraft.network.packet.Packet method_41935(net.minecraft.util.math.BlockPos, net.minecraft.util.math.Direction, int);
+    Code:
+       0: aload_0
+       1: aload_1
+       2: invokevirtual #959                // Method breakBlock:(Lnet/minecraft/util/math/BlockPos;)Z
+       5: pop
+       6: new           #9                  // class net/minecraft/network/packet/c2s/play/PlayerActionC2SPacket
+       9: dup
+      10: getstatic     #968                // Field net/minecraft/network/packet/c2s/play/PlayerActionC2SPacket$Action.START_DESTROY_BLOCK:Lnet/minecraft/network/packet/c2s/play/PlayerActionC2SPacket$Action;
+      13: aload_1
+      14: aload_2
+      15: iload_3
+      16: invokespecial #965                // Method net/minecraft/network/packet/c2s/play/PlayerActionC2SPacket."<init>":(Lnet/minecraft/network/packet/c2s/play/PlayerActionC2SPacket$Action;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/util/math/Direction;I)V
+      19: areturn
+
+  private net.minecraft.network.packet.Packet method_41930(net.minecraft.block.BlockState, net.minecraft.util.math.BlockPos, net.minecraft.util.math.Direction, int);
+    Code:
+       0: aload_1
+       1: invokevirtual #164                // Method net/minecraft/block/BlockState.isAir:()Z
+       4: ifne          11
+       7: iconst_1
+       8: goto          12
+      11: iconst_0
+      12: istore        5
+      14: iload         5
+      16: ifeq          47
+      19: aload_0
+      20: getfield      #281                // Field currentBreakingProgress:F
+      23: fconst_0
+      24: fcmpl
+      25: ifne          47
+      28: aload_1
+      29: aload_0
+      30: getfield      #84                 // Field client:Lnet/minecraft/client/MinecraftClient;
+      33: getfield      #128                // Field net/minecraft/client/MinecraftClient.world:Lnet/minecraft/client/world/ClientWorld;
+      36: aload_2
+      37: aload_0
+      38: getfield      #84                 // Field client:Lnet/minecraft/client/MinecraftClient;
+      41: getfield      #111                // Field net/minecraft/client/MinecraftClient.player:Lnet/minecraft/client/network/ClientPlayerEntity;
+      44: invokevirtual #972                // Method net/minecraft/block/BlockState.onBlockBreakStart:(Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/entity/player/PlayerEntity;)V
+      47: iload         5
+      49: ifeq          88
+      52: aload_1
+      53: aload_0
+      54: getfield      #84                 // Field client:Lnet/minecraft/client/MinecraftClient;
+      57: getfield      #111                // Field net/minecraft/client/MinecraftClient.player:Lnet/minecraft/client/network/ClientPlayerEntity;
+      60: aload_0
+      61: getfield      #84                 // Field client:Lnet/minecraft/client/MinecraftClient;
+      64: getfield      #111                // Field net/minecraft/client/MinecraftClient.player:Lnet/minecraft/client/network/ClientPlayerEntity;
+      67: invokevirtual #305                // Method net/minecraft/client/network/ClientPlayerEntity.getWorld:()Lnet/minecraft/world/World;
+      70: aload_2
+      71: invokevirtual #309                // Method net/minecraft/block/BlockState.calcBlockBreakingDelta:(Lnet/minecraft/entity/player/PlayerEntity;Lnet/minecraft/world/BlockView;Lnet/minecraft/util/math/BlockPos;)F
+      74: fconst_1
+      75: fcmpl
+      76: iflt          88
+      79: aload_0
+      80: aload_2
+      81: invokevirtual #959                // Method breakBlock:(Lnet/minecraft/util/math/BlockPos;)Z
+      84: pop
+      85: goto          150
+      88: aload_0
+      89: iconst_1
+      90: putfield      #247                // Field breakingBlock:Z
+      93: aload_0
+      94: aload_2
+      95: putfield      #68                 // Field currentBreakingPos:Lnet/minecraft/util/math/BlockPos;
+      98: aload_0
+      99: aload_0
+     100: getfield      #84                 // Field client:Lnet/minecraft/client/MinecraftClient;
+     103: getfield      #111                // Field net/minecraft/client/MinecraftClient.player:Lnet/minecraft/client/network/ClientPlayerEntity;
+     106: invokevirtual #142                // Method net/minecraft/client/network/ClientPlayerEntity.getMainHandStack:()Lnet/minecraft/item/ItemStack;
+     109: putfield      #75                 // Field selectedStack:Lnet/minecraft/item/ItemStack;
+     112: aload_0
+     113: fconst_0
+     114: putfield      #281                // Field currentBreakingProgress:F
+     117: aload_0
+     118: fconst_0
+     119: putfield      #311                // Field blockBreakingSoundCooldown:F
+     122: aload_0
+     123: getfield      #84                 // Field client:Lnet/minecraft/client/MinecraftClient;
+     126: getfield      #128                // Field net/minecraft/client/MinecraftClient.world:Lnet/minecraft/client/world/ClientWorld;
+     129: aload_0
+     130: getfield      #84                 // Field client:Lnet/minecraft/client/MinecraftClient;
+     133: getfield      #111                // Field net/minecraft/client/MinecraftClient.player:Lnet/minecraft/client/network/ClientPlayerEntity;
+     136: invokevirtual #285                // Method net/minecraft/client/network/ClientPlayerEntity.getId:()I
+     139: aload_0
+     140: getfield      #68                 // Field currentBreakingPos:Lnet/minecraft/util/math/BlockPos;
+     143: aload_0
+     144: invokevirtual #372                // Method getBlockBreakingProgress:()I
+     147: invokevirtual #289                // Method net/minecraft/client/world/ClientWorld.setBlockBreakingInfo:(ILnet/minecraft/util/math/BlockPos;I)V
+     150: new           #9                  // class net/minecraft/network/packet/c2s/play/PlayerActionC2SPacket
+     153: dup
+     154: getstatic     #968                // Field net/minecraft/network/packet/c2s/play/PlayerActionC2SPacket$Action.START_DESTROY_BLOCK:Lnet/minecraft/network/packet/c2s/play/PlayerActionC2SPacket$Action;
+     157: aload_2
+     158: aload_3
+     159: iload         4
+     161: invokespecial #965                // Method net/minecraft/network/packet/c2s/play/PlayerActionC2SPacket."<init>":(Lnet/minecraft/network/packet/c2s/play/PlayerActionC2SPacket$Action;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/util/math/Direction;I)V
+     164: areturn
+
+  private net.minecraft.network.packet.Packet method_41936(net.minecraft.util.math.BlockPos, net.minecraft.util.math.Direction, int);
+    Code:
+       0: aload_0
+       1: aload_1
+       2: invokevirtual #959                // Method breakBlock:(Lnet/minecraft/util/math/BlockPos;)Z
+       5: pop
+       6: new           #9                  // class net/minecraft/network/packet/c2s/play/PlayerActionC2SPacket
+       9: dup
+      10: getstatic     #968                // Field net/minecraft/network/packet/c2s/play/PlayerActionC2SPacket$Action.START_DESTROY_BLOCK:Lnet/minecraft/network/packet/c2s/play/PlayerActionC2SPacket$Action;
+      13: aload_1
+      14: aload_2
+      15: iload_3
+      16: invokespecial #965                // Method net/minecraft/network/packet/c2s/play/PlayerActionC2SPacket."<init>":(Lnet/minecraft/network/packet/c2s/play/PlayerActionC2SPacket$Action;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/util/math/Direction;I)V
+      19: areturn
+
+  static {};
+    Code:
+       0: invokestatic  #979                // Method com/mojang/logging/LogUtils.getLogger:()Lorg/slf4j/Logger;
+       3: putstatic     #671                // Field LOGGER:Lorg/slf4j/Logger;
+       6: return
+}

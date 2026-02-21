@@ -1,0 +1,4 @@
+clear
+$env:JAVA_HOME='C:\Program Files\Eclipse Adoptium\jdk-21.0.10.7-hotspot'
+$env:GRADLE_USER_HOME='D:\Code\WORK\fishka-1.21.5\.gradle-home'
+./gradlew runClient

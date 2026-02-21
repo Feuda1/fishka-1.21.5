@@ -1,0 +1,16 @@
+{
+  "required": true,
+  "package": "feuda.fishka.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "FishingBobberEntityMixin",
+    "FishingBobberEntityBiteAccessor",
+    "FishingBobberEntityCountdownAccessor"
+  ],
+  "client": [
+    "client.HandledScreenAccessor"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
